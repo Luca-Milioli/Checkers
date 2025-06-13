@@ -12,21 +12,22 @@ var winner : int
 func connect_to_target(receiver):
 	self.update_gui.connect(receiver.update.bind(self.board))
 	
+	
 func setup_matrix() -> void:
-	_create_matrix(COLUMNS, ROWS)
-	for y in range(COLUMNS):
-		for x in range(ROWS):
+	_create_matrix(ROWS, COLUMNS)
+	for x in range(ROWS):
+		for y in range(COLUMNS):
 			board[x][y] = NO_MAN
 			if (not bool((x + y)%2)):
-				if y < 3:
+				if x < 3:
 					board[x][y] = PLAYER_MAN
-				elif y > 4:
+				elif x > 4:
 					board[x][y] = IA_MAN
 
 func print_board():
 	print("PLAYER: 0\nIA: 1\nVOID: 2\n")
-	for i in range(COLUMNS):
-		print("\nCOLUMNS "+str(i+1)+": ")
+	for i in range(ROWS):
+		print("\nROWS "+str(i+1)+": ")
 		print(board[i])
 
 func _create_matrix(cols, rows):
