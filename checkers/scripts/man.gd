@@ -1,4 +1,4 @@
-extends Node2D
+extends TextureRect
 
 class_name Man
 
@@ -13,9 +13,6 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	pass
 
-func start(pos, cells_pos, white):
-	position = pos
-	cells_position = cells_pos
-	self.white = white
-	$AnimatedSprite2D.animation = ("white" if white else "black")
-	show()
+func set_image(white = true):
+	var path = "res://art/white_man.jpg" if white else "res://art/black_man.jpg"
+	self.texture = load(path)
