@@ -1,0 +1,12 @@
+ea4bc82a6ad023ab7ee23ee620429895
+::res://::1749807830
+board.tscn::PackedScene::7028254519195736866::1749807812::0::1::::<><>::res://scripts/grid.gd
+icon.svg::CompressedTexture2D::1174157267102430324::1749807812::1749807831::1::::<><>::
+::res://scenes/::1749807812
+board.tscn::PackedScene::3275464954609464128::1749807812::0::1::::<><>::res://scripts/grid.gd
+main.tscn::PackedScene::8598475154759810021::1749807812::0::1::::<><>::uid://bmwwouhjteyui::::res://scenes/board.tscn
+tile.tscn::PackedScene::1322603014540268544::1749807812::0::1::::<><>::res://scripts/tile.gd
+::res://scripts/::1749807812
+grid.gd::GDScript::-1::1749807812::0::1::::<>GridContainer<>::
+main.gd::GDScript::-1::1749807812::0::1::::<>Node<>::
+tile.gd::GDScript::-1::1749807812::0::1::::<>ColorRect<>::
