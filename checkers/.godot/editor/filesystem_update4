@@ -1,1 +1,7 @@
 res://scenes/board.tscn
+res://scripts/grid.gd
+res://scenes/main.tscn
+res://scenes/checks.tscn
+res://scenes/king.tscn
+res://scenes/man.tscn
+res://scenes/tile.tscn
