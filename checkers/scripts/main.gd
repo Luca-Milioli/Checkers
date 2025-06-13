@@ -1,11 +1,9 @@
 extends Node
 
+var logic : GameLogic
 
-# Called when the node enters the scene tree for the first time.
-func _ready() -> void:
-	$Board.
-
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass
+func _ready():
+	self.logic = GameLogic.new()
+	self.logic.setup_matrix()
+	self.logic.print_board()
+	self.logic.game_start()

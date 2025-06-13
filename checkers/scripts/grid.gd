@@ -25,4 +25,3 @@ func _ready():
 				#print("added man: ", man.position)
 				
 			self.add_child(tile)
-			print(tile.get_child_count())
