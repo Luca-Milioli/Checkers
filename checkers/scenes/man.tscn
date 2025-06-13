@@ -1,0 +1,31 @@
+[gd_scene load_steps=5 format=3 uid="uid://m15pmhxfyt8t"]
+
+[ext_resource type="Script" uid="uid://wnornx8701e8" path="res://man.gd" id="1_rb5kw"]
+[ext_resource type="Texture2D" uid="uid://by6rgl45uryjw" path="res://art/black_man.jpg" id="2_dqn0h"]
+[ext_resource type="Texture2D" uid="uid://cd68uprkopkhj" path="res://art/white_man.jpg" id="3_gca12"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_2x0nd"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_dqn0h")
+}],
+"loop": true,
+"name": &"black",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3_gca12")
+}],
+"loop": true,
+"name": &"white",
+"speed": 5.0
+}]
+
+[node name="Man" type="Node2D"]
+script = ExtResource("1_rb5kw")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_2x0nd")
+animation = &"white"
