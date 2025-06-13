@@ -20,9 +20,9 @@ func setup_matrix() -> void:
 			board[x][y] = NO_MAN
 			if (not bool((x + y)%2)):
 				if x < 3:
-					board[x][y] = PLAYER_MAN
-				elif x > 4:
 					board[x][y] = IA_MAN
+				elif x > 4:
+					board[x][y] = PLAYER_MAN
 
 func print_board():
 	print("PLAYER: 0\nIA: 1\nVOID: 2\n")
