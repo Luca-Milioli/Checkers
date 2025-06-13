@@ -1,5 +1,7 @@
 class_name GameLogic
 
+signal update_gui
+
 const COLUMNS = 8
 const ROWS = 8
 enum {PLAYER_MAN, IA_MAN, NO_MAN}
@@ -7,6 +9,9 @@ var board = []
 var player_turn : bool
 var winner : int
 
+func connect_to_target(receiver):
+	self.update_gui.connect(receiver.update.bind(self.board))
+	
 func setup_matrix() -> void:
 	_create_matrix(COLUMNS, ROWS)
 	for y in range(COLUMNS):
@@ -51,12 +56,14 @@ func _make_move():
 	_set_move(old_cell, new_cell)
 
 func _check_winner() -> int:
-	return 1
+	return 1	
 	
 func game_start():
+	
 	while not self.winner:
 		_change_turn()
 		_make_move()
+		update_gui.emit()
 		self.winner = _check_winner()
 		
 		

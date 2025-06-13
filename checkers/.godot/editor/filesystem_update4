@@ -1,11 +1,1 @@
-res://scenes/main.tscn
-res://scenes/checks.tscn
-res://scenes/king.tscn
-res://scenes/man.tscn
 res://scenes/board.tscn
-res://scripts/grid.gd
-res://scenes/tile.tscn
-res://scripts/man.gd
-res://scripts/tile.gd
-res://scripts/game_logic.gd
-res://scripts/main.gd
