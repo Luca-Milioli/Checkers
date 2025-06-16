@@ -58,12 +58,10 @@ func update(board):
 				if tile.get_child_count() == 1:
 					tile.remove_child(tile.get_child(0))
 					print("si")
-					var container_and_man = _create_man(board[x][y])
-					container_and_man[1].set_coordinates(x, y)
-					tile.add_child(container_and_man[0])
+				var container_and_man = _create_man(board[x][y])
+				container_and_man[1].set_coordinates(x, y)
+				tile.add_child(container_and_man[0])
 				last_board[x][y] = board[x][y]
-			else:
-				print("CIAO")
 	first_update = false
 
 func _create_matrix(cols, rows):

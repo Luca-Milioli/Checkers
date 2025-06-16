@@ -54,26 +54,29 @@ func _change_turn():
 func _make_move():
 	var move_passed = false
 	while not move_passed:
-		#print("Waiting for move ... ")
+		print("Waiting for move ... ")
 		var move = await self.move_ready
-		#print("Move is ready")
+		print("Move is ready")
 		move_passed = _check_move()
 	_set_move()
 
 
 func _check_winner() -> int:
-	return 0
+	return 1
 	
 func game_start():
+	var first = true
 	while not self.winner:
-		#_change_turn()
-		_make_move()
+		_change_turn()
+		if first:
+			_make_move()
+			first = false
+		else:
+			await _make_move()
 		update_gui.emit()
 		self.winner = _check_winner()
-	#update_gui.emit()
 
 func _on_move_selected(old, new):
-	print("aaaaasfdfs")
 	self.old_cell = old
 	self.new_cell = new
 	self.move_ready.emit()
