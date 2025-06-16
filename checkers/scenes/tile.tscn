@@ -12,3 +12,5 @@ grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource("1_a0q3e")
+
+[connection signal="gui_input" from="." to="." method="_on_gui_input"]

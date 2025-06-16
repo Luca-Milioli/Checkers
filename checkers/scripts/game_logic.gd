@@ -1,13 +1,18 @@
 class_name GameLogic
 
-signal update_gui
+signal update_gui  # $Board/Grid
+signal move_ready
 
 const COLUMNS = 8
 const ROWS = 8
 enum {PLAYER_MAN, IA_MAN, NO_MAN}
+
 var board = []
 var player_turn : bool
 var winner : int
+var old_cell : Vector2i
+var new_cell : Vector2i
+
 
 func connect_to_target(receiver):
 	self.update_gui.connect(receiver.update.bind(self.board))
@@ -36,34 +41,42 @@ func _create_matrix(cols, rows):
 			row.append(null)
 		self.board.append(row)
 
-func _check_move(old: Vector2i, new: Vector2i) -> bool:
+func _check_move() -> bool:
 	return true
 
-func _set_move(old: Vector2i, new: Vector2i):
-	self.board[old[0]][old[1]] = self.board[new[0]][new[1]]
+func _set_move():
+	self.board[self.old_cell[0]][self.old_cell[1]] = \
+		self.board[self.new_cell[0]][self.new_cell[1]]
 	
 func _change_turn():
 	self.player_turn = !player_turn
 
 func _make_move():
 	var move_passed = false
-	var old_cell : Vector2i
-	var new_cell : Vector2i
 	while not move_passed:
-		old_cell = Vector2i(0, 0)
-		new_cell = Vector2i(0, 0)
-		move_passed = _check_move(old_cell, new_cell)
-	_set_move(old_cell, new_cell)
+		#print("Waiting for move ... ")
+		var move = await self.move_ready
+		#print("Move is ready")
+		move_passed = _check_move()
+	_set_move()
+
 
 func _check_winner() -> int:
-	return 1	
+	return 0
 	
 func game_start():
 	while not self.winner:
-		_change_turn()
+		#_change_turn()
 		_make_move()
 		update_gui.emit()
 		self.winner = _check_winner()
+	#update_gui.emit()
+
+func _on_move_selected(old, new):
+	print("aaaaasfdfs")
+	self.old_cell = old
+	self.new_cell = new
+	self.move_ready.emit()
 		
 		
 		

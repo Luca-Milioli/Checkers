@@ -7,39 +7,63 @@ enum {PLAYER_MAN, IA_MAN, NO_MAN}
 var last_board = []
 var selected_piece = null
 var first_update = true
+var man_reference: Man
+
+signal move_selected
+
 
 func _ready():
 	# update()
 	_create_matrix(8,8)
 
+func connect_to_target(receiver):
+	self.move_selected.connect(receiver._on_move_selected)
+	
 func _create_man(color):
-	var man = MAN_SCENE.instantiate()
+	var man_container = MAN_SCENE.instantiate()
+	man_container.connect("piece_clicked", Callable(self, "_on_piece_clicked"))
+	
+	var man = man_container.get_node("Man")
+
 	if color == PLAYER_MAN:
-		man.get_node("Man").set_image(true)
+		man.set_image(true)
 	elif color == IA_MAN:
-		man.get_node("Man").set_image(false)
-	return man
+		man.set_image(false)
+	
+	return [man_container, man]
 
 func get_cell(row: int, col: int) -> ColorRect:
 	return self.get_child(row * 8 + col) as ColorRect
+	
 
 func update(board):
+	#print("updating gui...")
 	var size = board.size()
 	for x in range(size):
 		for y in range(size):
 			if first_update:
 				var tile = TILE_SCENE.instantiate()
+				tile.connect("tile_clicked", Callable(self, "_on_tile_clicked"))
 				tile.set_coordinates(x, y)
 				if board[x][y] != NO_MAN:
-					tile.add_child(_create_man(board[x][y]))
+					var container_and_man = _create_man(board[x][y])
+					container_and_man[1].set_coordinates(x, y)
+					tile.add_child(container_and_man[0])	
 				tile.set_dark(not bool((x + y)%2))
 				self.add_child(tile)
 			elif board[x][y] != last_board[x][y]:
-				last_board[x][y] = board[x][y]
+				
 				var tile = self.get_cell(x,y)
+				#print(tile.get_coordinates())
 				if tile.get_child_count() == 1:
 					tile.remove_child(tile.get_child(0))
-				tile.add_child(_create_man(board[x][y]))
+					print("si")
+					var container_and_man = _create_man(board[x][y])
+					container_and_man[1].set_coordinates(x, y)
+					tile.add_child(container_and_man[0])
+				last_board[x][y] = board[x][y]
+			else:
+				print("CIAO")
 	first_update = false
 
 func _create_matrix(cols, rows):
@@ -49,15 +73,19 @@ func _create_matrix(cols, rows):
 			row.append(null)
 		self.last_board.append(row)
 
-func selected_cell(cell):
-	if selected_piece == null:
-		# Seleziona pezzo se c’è sopra un pezzo
-		if last_board == NO_MAN:
-			selected_piece = cell
-			cell.highlight()
-	else:
-		# Sposta il pezzo selezionato qui
-		if cell.is_empty():
-			cell.set_piece(selected_piece.get_piece())
-			selected_piece.clear_piece()
-		selected_piece = null
+func _on_piece_clicked(piece):
+	if self.man_reference:
+		self.man_reference.deselect()
+	self.man_reference = piece
+	self.man_reference.select()
+	
+func _on_tile_clicked(tile):
+	if not self.man_reference:
+		return
+	
+	var tile_coord = tile.get_coordinates()
+	var man_coord = self.man_reference.get_coordinates()
+	if tile_coord != man_coord:
+		if(self.man_reference.is_selected):
+			self.move_selected.emit(man_coord, tile_coord)
+		self.man_reference.deselect()
