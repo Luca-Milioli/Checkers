@@ -12,7 +12,7 @@ func _ready():
 	# update()
 	_create_matrix(8,8)
 
-func create_man(color):
+func _create_man(color):
 	var man = MAN_SCENE.instantiate()
 	if color == PLAYER_MAN:
 		man.get_node("Man").set_image(true)
@@ -31,16 +31,15 @@ func update(board):
 				var tile = TILE_SCENE.instantiate()
 				tile.set_coordinates(x, y)
 				if board[x][y] != NO_MAN:
-					tile.add_child(create_man(board[x][y]))
-				var set_color: bool = (x + y) % 2
-				tile.set_dark(not set_color)
+					tile.add_child(_create_man(board[x][y]))
+				tile.set_dark(not bool((x + y)%2))
 				self.add_child(tile)
 			elif board[x][y] != last_board[x][y]:
 				last_board[x][y] = board[x][y]
 				var tile = self.get_cell(x,y)
 				if tile.get_child_count() == 1:
 					tile.remove_child(tile.get_child(0))
-				tile.add_child(create_man(board[x][y]))
+				tile.add_child(_create_man(board[x][y]))
 	first_update = false
 
 func _create_matrix(cols, rows):

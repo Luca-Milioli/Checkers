@@ -12,7 +12,6 @@ var winner : int
 func connect_to_target(receiver):
 	self.update_gui.connect(receiver.update.bind(self.board))
 	
-	
 func setup_matrix() -> void:
 	_create_matrix(ROWS, COLUMNS)
 	for x in range(ROWS):
@@ -52,7 +51,7 @@ func _make_move():
 	var new_cell : Vector2i
 	while not move_passed:
 		old_cell = Vector2i(0, 0)
-		new_cell = Vector2i(0, 1)
+		new_cell = Vector2i(0, 0)
 		move_passed = _check_move(old_cell, new_cell)
 	_set_move(old_cell, new_cell)
 
@@ -60,12 +59,12 @@ func _check_winner() -> int:
 	return 1	
 	
 func game_start():
-	
 	while not self.winner:
 		_change_turn()
 		_make_move()
 		update_gui.emit()
 		self.winner = _check_winner()
+		
 		
 		
 		

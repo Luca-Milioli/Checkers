@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://m15pmhxfyt8t"]
 
-[ext_resource type="Script" uid="uid://cidxpu8evsab" path="res://scripts/man.gd" id="1_rb5kw"]
+[ext_resource type="Script" path="res://scripts/man.gd" id="1_rb5kw"]
 [ext_resource type="Texture2D" uid="uid://cd68uprkopkhj" path="res://art/white_man.jpg" id="3_gca12"]
 
 [node name="ManContainer" type="Control"]
