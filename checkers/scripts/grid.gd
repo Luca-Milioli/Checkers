@@ -96,4 +96,4 @@ func _on_tile_clicked(tile):
 	if tile_coord != man_coord:
 		if(self.man_reference.is_selected):
 			self.move_selected.emit(man_coord, tile_coord)
-		#self.man_reference.deselect()
+		self.man_reference.deselect()

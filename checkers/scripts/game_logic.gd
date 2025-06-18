@@ -45,7 +45,7 @@ func _check_move() -> bool:
 
 func _set_move():
 	self.board[self.old_cell[0]][self.old_cell[1]] = NO_MAN
-	self.board[self.new_cell[0]][self.new_cell[1]] = int(player_turn)
+	self.board[self.new_cell[0]][self.new_cell[1]] = int(self.player_turn)
 	
 func _change_turn():
 	self.player_turn = !player_turn
