@@ -1,7 +1,9 @@
-res://scenes/checks.tscn
-res://scripts/game_logic.gd
 res://scenes/main.tscn
 res://scenes/board.tscn
 res://scenes/tile.tscn
 res://scenes/man.tscn
+res://scenes/checks.tscn
 res://scripts/grid.gd
+res://scripts/game_logic.gd
+res://scripts/man_container.gd
+res://scripts/man.gd

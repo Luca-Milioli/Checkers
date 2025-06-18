@@ -19,6 +19,7 @@ func _process(delta: float) -> void:
 
 func set_image(white = true):
 	var path = "res://art/white_man.jpg" if white else "res://art/black_man.jpg"
+	self.white = white
 	self.texture = load(path)
 
 func set_coordinates(x: int, y: int) -> void:
@@ -38,3 +39,6 @@ func deselect():
 
 func is_selected():
 	return is_selected
+
+func is_white():
+	return self.white

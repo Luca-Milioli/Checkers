@@ -10,6 +10,7 @@ var last_board = []
 var selected_piece = null
 var first_update = true
 var man_reference: Man
+var player: int # 0 white, 1 black
 
 signal move_selected
 
@@ -42,8 +43,7 @@ func print_board(board):
 		print("\nROWS "+str(i+1)+": ")
 		print(board[i])
 
-func update(board):
-	print_board(board)
+func _update(board):
 	var size = board.size()
 	for x in range(size):
 		for y in range(size):
@@ -59,14 +59,11 @@ func update(board):
 				self.add_child(tile)
 				self.last_board[x][y] = board[x][y]
 			elif board[x][y] != self.last_board[x][y]:
-				print("np")
 				var tile = self.get_cell(x,y)
-				#print(tile.get_coordinates())
 				var removed_man = tile.get_child(0)
 				if removed_man:
 					tile.remove_child(removed_man)
 					removed_man.queue_free()
-					print("si")
 				if board[x][y] != NO_MAN:
 					var container_and_man = _create_man(board[x][y])
 					container_and_man[1].set_coordinates(x, y)
@@ -82,11 +79,22 @@ func _create_matrix(cols, rows):
 		self.last_board.append(row)
 
 func _on_piece_clicked(piece):
+	# SONO UN FENOMENO SBORRO
+	var legal : bool
+	
+	# piece's owner is player
+	if (self.player ^ int(piece.is_white())): # bitwise xor
+		legal = true
+	# piece's owner is enemy
+	else:
+		legal = false
+		
 	if self.man_reference:
 		self.man_reference.deselect()
-	self.man_reference = piece
-	self.man_reference.select()
-	
+	if legal:
+		self.man_reference = piece
+		self.man_reference.select()
+		
 func _on_tile_clicked(tile):
 	if not self.man_reference:
 		return
@@ -96,4 +104,8 @@ func _on_tile_clicked(tile):
 	if tile_coord != man_coord:
 		if(self.man_reference.is_selected):
 			self.move_selected.emit(man_coord, tile_coord)
-		self.man_reference.deselect()
+			self.man_reference = null
+		#self.man_reference.deselect()
+
+func _player_changed(player):
+	self.player = int(player)
