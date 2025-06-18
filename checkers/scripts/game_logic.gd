@@ -4,12 +4,11 @@ signal update_gui  # $Board/Grid
 signal move_ready
 signal player_changed(player)
 
-const COLUMNS = 8
-const ROWS = 8
+const SIZE = 8
 enum {PLAYER_MAN, IA_MAN, NO_MAN}
 
 var board = []
-var player_turn : bool
+var white_turn : bool
 var winner : int
 var old_cell : Vector2i
 var new_cell : Vector2i
@@ -19,9 +18,9 @@ func connect_to_target(receiver):
 	self.player_changed.connect(receiver._player_changed)
 	
 func setup_matrix() -> void:
-	_create_matrix(ROWS, COLUMNS)
-	for x in range(ROWS):
-		for y in range(COLUMNS):
+	_create_matrix(SIZE, SIZE)
+	for x in range(SIZE):
+		for y in range(SIZE):
 			board[x][y] = NO_MAN
 			if (not bool((x + y)%2)):
 				if x < 3:
@@ -31,7 +30,7 @@ func setup_matrix() -> void:
 
 func print_board():
 	print("PLAYER: 0\nIA: 1\nVOID: 2\n")
-	for i in range(ROWS):
+	for i in range(SIZE):
 		print("\nROWS "+str(i+1)+": ")
 		print(board[i])
 
@@ -43,15 +42,23 @@ func _create_matrix(cols, rows):
 		self.board.append(row)
 
 func _check_move() -> bool:
+	if _get_new_cell() != NO_MAN:	# can't go in an occupied cell
+		return false
+	if bool((self.new_cell[0] + self.new_cell[1]) % 2):
+		return false	# can't go on white cell
+	
 	return true
 
 func _set_move():
 	self.board[self.old_cell[0]][self.old_cell[1]] = NO_MAN
-	self.board[self.new_cell[0]][self.new_cell[1]] = int(self.player_turn)
+	self.board[self.new_cell[0]][self.new_cell[1]] = int(self.white_turn)
+	if abs(new_cell[1] - old_cell[1]) == 2:		# capture
+		self.board[max(self.old_cell[0], self.new_cell[0]) - 1] \
+			[max(self.old_cell[1], self.new_cell[1]) - 1] = NO_MAN
 	
 func _change_turn():
-	self.player_turn = !player_turn
-	self.player_changed.emit(self.player_turn)
+	self.white_turn = !white_turn
+	self.player_changed.emit(self.white_turn)
 
 func _make_move():
 	var move_passed = false
@@ -60,12 +67,11 @@ func _make_move():
 		move_passed = _check_move()
 	_set_move()
 
-
 func _check_winner() -> int:
 	return 0
 	
 func game_start():
-	self.player_turn = true
+	self.white_turn = true
 	update_gui.emit()
 	while not self.winner:
 		_change_turn()
@@ -77,5 +83,9 @@ func _on_move_selected(old, new):
 	self.old_cell = old
 	self.new_cell = new
 	self.move_ready.emit()
-	
-		
+
+func _get_old_cell():
+	return self.board[self.old_cell[0]][self.old_cell[1]]
+
+func _get_new_cell():
+	return self.board[self.new_cell[0]][self.new_cell[1]]

@@ -1,8 +1,7 @@
-extends Node
+extends Control
 
 var logic : GameLogic
-@onready var gui = $Board/Grid
-
+@onready var gui = $VBoxContainer/Board/Grid
 func _ready():
 	self.logic = GameLogic.new()
 	self.logic.connect_to_target(self.gui)

@@ -7,3 +7,4 @@ res://scripts/grid.gd
 res://scripts/game_logic.gd
 res://scripts/man_container.gd
 res://scripts/man.gd
+res://scripts/main.gd

@@ -2,18 +2,17 @@
 
 [ext_resource type="Script" path="res://scripts/grid.gd" id="1_74804"]
 
-[node name="Board" type="Control"]
-layout_mode = 3
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
-mouse_filter = 1
+[node name="MarginContainer" type="MarginContainer"]
+offset_right = 50.0
+offset_bottom = 50.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
 
 [node name="Grid" type="GridContainer" parent="."]
 clip_contents = true
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+size_flags_vertical = 3
 theme_override_constants/h_separation = 0
 theme_override_constants/v_separation = 0
 columns = 8

@@ -3,8 +3,7 @@ extends GridContainer
 const TILE_SCENE = preload("res://scenes/tile.tscn")
 const MAN_SCENE = preload("res://scenes/man.tscn")
 
-const COLUMNS = 8
-const ROWS = 8
+const SIZE = 8
 enum {PLAYER_MAN, IA_MAN, NO_MAN}
 var last_board = []
 var selected_piece = null
@@ -16,7 +15,7 @@ signal move_selected
 
 func _ready():
 	# update()
-	_create_matrix(ROWS,COLUMNS)
+	_create_matrix(SIZE, SIZE)
 
 func connect_to_target(receiver):
 	self.move_selected.connect(receiver._on_move_selected)
@@ -35,11 +34,11 @@ func _create_man(color):
 	return [man_container, man]
 
 func get_cell(row: int, col: int) -> ColorRect:
-	return self.get_child(row * 8 + col) as ColorRect
+	return self.get_child(row * SIZE + col) as ColorRect
 	
 func print_board(board):
 	print("PLAYER: 0\nIA: 1\nVOID: 2\n")
-	for i in range(ROWS):
+	for i in range(SIZE):
 		print("\nROWS "+str(i+1)+": ")
 		print(board[i])
 

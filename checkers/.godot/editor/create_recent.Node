@@ -1,3 +1,8 @@
 Control
+MarginContainer
+VBoxContainer
+CenterContainer
+Label
+HBoxContainer
 TextureRect
 Sprite2D
