@@ -46,6 +46,7 @@ func _check_move() -> bool:
 func _set_move():
 	self.board[self.old_cell[0]][self.old_cell[1]] = NO_MAN
 	self.board[self.new_cell[0]][self.new_cell[1]] = int(self.player_turn)
+	print("a")
 	
 func _change_turn():
 	self.player_turn = !player_turn
@@ -64,6 +65,7 @@ func _check_winner() -> int:
 	return 0
 	
 func game_start():
+	self.player_turn
 	update_gui.emit()
 	while not self.winner:
 		_change_turn()
