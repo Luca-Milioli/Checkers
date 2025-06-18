@@ -13,7 +13,6 @@ var winner : int
 var old_cell : Vector2i
 var new_cell : Vector2i
 
-
 func connect_to_target(receiver):
 	self.update_gui.connect(receiver.update.bind(self.board))
 	
@@ -45,8 +44,8 @@ func _check_move() -> bool:
 	return true
 
 func _set_move():
-	self.board[self.old_cell[0]][self.old_cell[1]] = \
-		self.board[self.new_cell[0]][self.new_cell[1]]
+	self.board[self.old_cell[0]][self.old_cell[1]] = NO_MAN
+	self.board[self.new_cell[0]][self.new_cell[1]] = int(player_turn)
 	
 func _change_turn():
 	self.player_turn = !player_turn
@@ -62,17 +61,13 @@ func _make_move():
 
 
 func _check_winner() -> int:
-	return 1
+	return 0
 	
 func game_start():
-	var first = true
+	update_gui.emit()
 	while not self.winner:
 		_change_turn()
-		if first:
-			_make_move()
-			first = false
-		else:
-			await _make_move()
+		await _make_move()
 		update_gui.emit()
 		self.winner = _check_winner()
 
@@ -80,7 +75,4 @@ func _on_move_selected(old, new):
 	self.old_cell = old
 	self.new_cell = new
 	self.move_ready.emit()
-		
-		
-		
 		

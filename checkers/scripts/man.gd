@@ -5,14 +5,13 @@ class_name Man
 var white
 var x
 var y
-var is_selected : bool
+var _is_selected : bool
 const DEFAULT_MODULATE = Color(1,1,1,1)
 const CLICK_MODULATE = Color(0.4, 1, 0.8, 1)
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	self.is_selected = false
-	self.white = true
+	self._is_selected = false
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
@@ -31,9 +30,11 @@ func get_coordinates():
 
 func select():
 	self.modulate = self.CLICK_MODULATE
-	self.is_selected = true
+	self._is_selected = true
 
 func deselect():
 	self.modulate = self.DEFAULT_MODULATE
-	self.is_selected = false
-	
+	self._is_selected = false
+
+func is_selected():
+	return is_selected
