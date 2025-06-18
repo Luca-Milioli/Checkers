@@ -1,7 +1,30 @@
-[gd_scene load_steps=3 format=3 uid="uid://durfvn0w6iv78"]
+[gd_scene load_steps=8 format=3 uid="uid://durfvn0w6iv78"]
 
 [ext_resource type="Script" path="res://scripts/main.gd" id="1_pptng"]
 [ext_resource type="PackedScene" uid="uid://bmwwouhjteyui" path="res://scenes/board.tscn" id="1_qq4w8"]
+[ext_resource type="FontFile" uid="uid://fmy6dk7ybvpd" path="res://art/fonts/xolonium/xolonium-fonts-4.1/ttf/Xolonium-Bold.ttf" id="2_ly7go"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_hrhvo"]
+font = ExtResource("2_ly7go")
+font_size = 24
+font_color = Color(1, 1, 0.129412, 1)
+shadow_size = 9
+shadow_color = Color(0.580392, 0, 0.701961, 0)
+
+[sub_resource type="LabelSettings" id="LabelSettings_i5vyl"]
+font = ExtResource("2_ly7go")
+font_size = 24
+font_color = Color(1, 1, 0.129412, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_e2h5i"]
+font = ExtResource("2_ly7go")
+font_size = 24
+font_color = Color(1, 1, 0.129412, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_vfwxg"]
+font = ExtResource("2_ly7go")
+font_size = 24
+font_color = Color(1, 1, 0.129412, 1)
 
 [node name="Main" type="Control"]
 layout_mode = 3
@@ -21,37 +44,59 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="TopHUD" type="Control" parent="VBoxContainer"]
-custom_minimum_size = Vector2(0, 400)
+custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
 
-[node name="Player1" type="Label" parent="VBoxContainer/TopHUD"]
+[node name="Player2" type="Label" parent="VBoxContainer/TopHUD"]
 layout_mode = 2
-offset_right = 1.0
-offset_bottom = 23.0
+offset_left = 9.0
+offset_top = 22.0
+offset_right = 142.0
+offset_bottom = 62.0
+text = "Player 2"
+label_settings = SubResource("LabelSettings_hrhvo")
+autowrap_mode = 3
+clip_text = true
 
-[node name="TImer1" type="Label" parent="VBoxContainer/TopHUD"]
+[node name="Player2Timer" type="Label" parent="VBoxContainer/TopHUD"]
 layout_mode = 2
-offset_left = 5.0
-offset_right = 6.0
-offset_bottom = 23.0
+offset_left = 405.0
+offset_top = 22.0
+offset_right = 538.0
+offset_bottom = 62.0
+text = "00:00"
+label_settings = SubResource("LabelSettings_i5vyl")
+horizontal_alignment = 2
 
 [node name="Board" parent="VBoxContainer" instance=ExtResource("1_qq4w8")]
 custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
 
 [node name="BotHUD" type="Control" parent="VBoxContainer"]
-custom_minimum_size = Vector2(0, 400)
+custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
 
-[node name="Player2" type="Label" parent="VBoxContainer/BotHUD"]
+[node name="Player1" type="Label" parent="VBoxContainer/BotHUD"]
 layout_mode = 2
-offset_top = 8.0
-offset_right = 1.0
-offset_bottom = 31.0
+offset_left = 9.0
+offset_top = -3.0
+offset_right = 142.0
+offset_bottom = 37.0
+text = "Player 1"
+label_settings = SubResource("LabelSettings_e2h5i")
+autowrap_mode = 3
 
-[node name="TImer2" type="Label" parent="VBoxContainer/BotHUD"]
+[node name="Player1Timer" type="Label" parent="VBoxContainer/BotHUD"]
 layout_mode = 2
-offset_left = 5.0
-offset_top = 8.0
-offset_right = 6.0
-offset_bottom = 31.0
+offset_left = 405.0
+offset_top = -3.0
+offset_right = 538.0
+offset_bottom = 37.0
+text = "00:00"
+label_settings = SubResource("LabelSettings_vfwxg")
+horizontal_alignment = 2
+
+[node name="UpdateLabel" type="Timer" parent="."]
+autostart = true
+
+[connection signal="timeout" from="UpdateLabel" to="VBoxContainer/TopHUD/Player2Timer" method="_on_update_label_timeout"]

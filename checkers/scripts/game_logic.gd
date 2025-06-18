@@ -13,6 +13,23 @@ var winner : int
 var old_cell : Vector2i
 var new_cell : Vector2i
 
+
+# METTI IN CLASSE PLAYER
+var seconds: int
+# Called when the node enters the scene tree for the first time.
+func _ready() -> void:
+	self.seconds = 600
+
+func format_time() -> void:
+	var minutes = self.seconds / 60
+	var secs = self.seconds % 60
+	self.text = "%02d:%02d" % [minutes, secs]
+
+func _on_update_label_timeout() -> void:
+	self.seconds -= 1
+	self.format_time()
+
+
 func connect_to_target(receiver):
 	self.update_gui.connect(receiver._update.bind(self.board))
 	self.player_changed.connect(receiver._player_changed)

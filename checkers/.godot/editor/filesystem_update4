@@ -8,3 +8,5 @@ res://scripts/game_logic.gd
 res://scripts/man_container.gd
 res://scripts/man.gd
 res://scripts/main.gd
+res://art/fonts/kirifont/Kirifont.tres
+res://scripts/player_timer.gd
