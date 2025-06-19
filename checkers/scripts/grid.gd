@@ -9,7 +9,7 @@ var last_board = []
 var selected_piece = null
 var first_update = true
 var man_reference: Man
-var player: int # 0 white, 1 black
+var white_turn: bool # 1 white, 0 black
 
 signal move_selected
 
@@ -78,16 +78,8 @@ func _create_matrix(cols, rows):
 		self.last_board.append(row)
 
 func _on_piece_clicked(piece):
-	# SONO UN FENOMENO SBORRO
-	var legal : bool
+	var legal = white_turn == piece.is_white()
 	
-	# piece's owner is player
-	if (self.player ^ int(piece.is_white())): # bitwise xor
-		legal = true
-	# piece's owner is enemy
-	else:
-		legal = false
-		
 	if self.man_reference:
 		self.man_reference.deselect()
 	if legal:
@@ -100,11 +92,10 @@ func _on_tile_clicked(tile):
 	
 	var tile_coord = tile.get_coordinates()
 	var man_coord = self.man_reference.get_coordinates()
+	print("tile_coord: " + str(tile_coord) + "\nman_coord: " + str(man_coord))
 	if tile_coord != man_coord:
 		if(self.man_reference.is_selected):
-			self.move_selected.emit(man_coord, tile_coord)
-			self.man_reference = null
-		#self.man_reference.deselect()
+			self.move_selected.emit(man_coord, tile_coord, self.man_reference.available_moves(last_board))
 
-func _player_changed(player):
-	self.player = int(player)
+func _player_changed(white_turn):
+	self.white_turn = white_turn
