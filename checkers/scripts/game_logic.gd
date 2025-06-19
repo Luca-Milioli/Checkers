@@ -13,32 +13,23 @@ var board = []
 var grid : Board
 var white_turn : bool
 var winner : int
+var player1 : Player
+var player2: Player
 var old_cell : Vector2i
 var new_cell : Vector2i
 var available_moves
 var available_captures
 
+
+func set_players(player1: Player, player2: Player):
+	self.player1 = player1
+	self.player2 = player2
+	
 func connect_to_target(receiver):
 	self.player_changed.connect(receiver._player_changed)
 	self.piece_moved.connect(receiver._on_piece_moved)
 	self.capture.connect(receiver._on_capture)
 	self.new_king.connect(receiver._on_new_king)
-
-# METTI IN CLASSE PLAYER
-var seconds: int
-
-# Called when the node enters the scene tree for the first time.
-func _ready() -> void:
-	self.seconds = 600
-
-func format_time() -> void:
-	var minutes = self.seconds / 60
-	var secs = self.seconds % 60
-	self.text = "%02d:%02d" % [minutes, secs]
-
-func _on_update_label_timeout() -> void:
-	self.seconds -= 1
-	self.format_time()
 
 func setup_matrix() -> void:
 	_create_matrix(SIZE, SIZE)
@@ -82,8 +73,9 @@ func _set_move():
 		self.new_king.emit(old_cell)
 
 func _change_turn():
-	self.white_turn = not self.white_turn
-	self.player_changed.emit(self.white_turn)
+	self.player1.set_playing(!self.player1.is_playing())
+	self.player2.set_playing(!self.player2.is_playing())
+	self.player_changed.emit(self.player1.is_playing())
 
 func _make_move():
 	await self.move_ready
@@ -104,7 +96,8 @@ func _update_available_moves():
 		available_moves = {}
 	
 func game_start():
-	self.white_turn = true
+	self.player1.set_playing(true)
+	self.player2.set_playing(false) 
 	_update_available_moves()
 	while not self.winner:
 		if await _make_move():
@@ -123,7 +116,7 @@ func _on_move_selected(old, new):
 	self.old_cell = old
 	self.new_cell = new
 	self.move_ready.emit()
-
+	
 func _available_captures():
 	self.available_captures = {}
 	for x in range(SIZE):

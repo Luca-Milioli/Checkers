@@ -1,10 +1,9 @@
-res://scenes/man.tscn
-res://scripts/game_logic.gd
-res://scripts/grid.gd
 res://scenes/main.tscn
+res://scripts/man.gd
 res://scenes/board.tscn
 res://scenes/tile.tscn
-res://scripts/man.gd
-res://scripts/main.gd
-res://scripts/king.gd
+res://scenes/man.tscn
 res://scenes/king.tscn
+res://scripts/main.gd
+res://scripts/grid.gd
+res://scripts/game_logic.gd

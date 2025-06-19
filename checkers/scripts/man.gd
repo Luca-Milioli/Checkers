@@ -11,8 +11,6 @@ var _is_selected : bool
 const DEFAULT_MODULATE = Color(1,1,1,1)
 const CLICK_MODULATE = Color(0.4, 1, 0.8, 1)
 
-signal piece_moved(src_cell)
-
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	self._is_selected = false
@@ -20,9 +18,6 @@ func _ready() -> void:
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	pass
-
-func connect_to_target(receiver):
-	self.piece_moved.connect(receiver._on_piece_moved)
 
 func set_image(white = true):
 	var path = "res://art/white_man.jpg" if white else "res://art/black_man.jpg"
@@ -89,8 +84,3 @@ func available_moves(board) -> Array:
 	if _check_move(move, board):
 		avail_moves.push_back(move)
 	return avail_moves
-
-#func _move(new_cell):
-#	var old_cell = self.get_coordinates()
-#	self.set_coordinates(new_cell.x, new_cell.y)
-#	self.piece_moved.emit(old_cell, self.get_coordinates())

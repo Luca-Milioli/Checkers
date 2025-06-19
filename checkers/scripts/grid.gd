@@ -85,6 +85,7 @@ func _on_tile_clicked(tile):
 	if tile_coord != man_coord:
 		if(self.man_reference.is_selected()):
 			self.move_selected.emit(man_coord, tile_coord)
+			print("gfsssdf")
 
 func _on_piece_moved(old_cell, new_cell):
 	var old_tile = self.get_cell(old_cell.x, old_cell.y)
