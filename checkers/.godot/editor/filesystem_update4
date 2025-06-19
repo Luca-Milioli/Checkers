@@ -5,3 +5,6 @@ res://scenes/main.tscn
 res://scenes/board.tscn
 res://scenes/tile.tscn
 res://scripts/man.gd
+res://scripts/main.gd
+res://scripts/king.gd
+res://scenes/king.tscn

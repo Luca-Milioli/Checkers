@@ -7,5 +7,6 @@ func _ready():
 	self.logic.connect_to_target(self.gui)
 	self.gui.connect_to_target(self.logic)
 	self.logic.setup_matrix()
-	#self.logic.print_board()
+	self.gui.setup_gui(logic.get_board())
+	self.logic.set_grid(self.gui)
 	self.logic.game_start()
