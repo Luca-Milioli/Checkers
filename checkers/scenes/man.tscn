@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://scripts/man_container.gd" id="1_xkol3"]
 [ext_resource type="Script" path="res://scripts/king.gd" id="3_fo7j3"]
-[ext_resource type="Texture2D" uid="uid://cd68uprkopkhj" path="res://art/white_man.jpg" id="3_gca12"]
+[ext_resource type="Texture2D" path="res://art/white_man.jpg" id="3_gca12"]
 
 [node name="ManContainer" type="Control"]
 layout_mode = 3
@@ -29,6 +29,7 @@ offset_right = 316.0
 offset_bottom = 316.0
 scale = Vector2(0.125, 0.125)
 texture = ExtResource("3_gca12")
+expand_mode = 1
 script = ExtResource("3_fo7j3")
 
 [connection signal="gui_input" from="." to="." method="_on_gui_input"]

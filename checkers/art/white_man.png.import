@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cd68uprkopkhj"
-path="res://.godot/imported/white_man.jpg-d97225da2c33d907512e821aa3db4a50.ctex"
+uid="uid://phqwg3mnu34i"
+path="res://.godot/imported/white_man.png-4eabf4eb67b3361758f1ed0c78981c05.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://art/white_man.jpg"
-dest_files=["res://.godot/imported/white_man.jpg-d97225da2c33d907512e821aa3db4a50.ctex"]
+source_file="res://art/white_man.png"
+dest_files=["res://.godot/imported/white_man.png-4eabf4eb67b3361758f1ed0c78981c05.ctex"]
 
 [params]
 

@@ -20,7 +20,7 @@ func _process(delta: float) -> void:
 	pass
 
 func set_image(white = true):
-	var path = "res://art/white_man.jpg" if white else "res://art/black_man.jpg"
+	var path = "res://art/white_man.png" if white else "res://art/black_man.png"
 	self.white = white
 	self.texture = load(path)
 

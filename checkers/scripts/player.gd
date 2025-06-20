@@ -8,13 +8,13 @@ var _playing : bool
 var _winner : bool
 
 func inizialize(name: String, man_number: int, white: bool, playing: bool):
-	self.set_name(name)
+	self.set_ign(name)
 	self.set_man_number(man_number)
 	self.set_white(white)
 	self._playing = playing # evito problemi di override
 
 func get_ign():
-	return self.ign
+	return self._ign
 
 func get_man_number():
 	return self._man_number
