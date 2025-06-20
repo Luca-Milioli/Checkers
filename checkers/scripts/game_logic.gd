@@ -11,7 +11,6 @@ enum {PLAYER_MAN, IA_MAN, NO_MAN}
 
 var board = []
 var grid : Board
-var white_turn : bool
 var winner : int
 var player1 : Player
 var player2: Player
@@ -63,13 +62,14 @@ func _check_move() -> bool:
 	return false
 
 func _set_move():
+	var white_turn = self.player1.is_playing()
 	self.board[self.old_cell.x][self.old_cell.y] = NO_MAN
-	self.board[self.new_cell.x][self.new_cell.y] = int(not self.white_turn)
+	self.board[self.new_cell.x][self.new_cell.y] = int(not white_turn)
 	if abs(new_cell.y - old_cell.y) == 2:		# capture
 		var capture_cell = Vector2i(max(self.old_cell.x, self.new_cell.x) - 1, max(self.old_cell.y, self.new_cell.y) - 1)
 		self.board[capture_cell.x][capture_cell.y] = NO_MAN
 		self.capture.emit(capture_cell)
-	if new_cell.x == 7 and not self.white_turn or new_cell.x == 0 and self.white_turn:
+	if new_cell.x == 7 and not white_turn or new_cell.x == 0 and white_turn:
 		self.new_king.emit(old_cell)
 
 func _change_turn():
@@ -86,7 +86,7 @@ func _make_move():
 
 func _check_winner() -> int:
 	if available_captures.is_empty() and available_moves.is_empty():
-		return 2 if self.white_turn else 1
+		return 2 if self.player1.is_playing() else 1
 	return 0
 	
 func _update_available_moves():
@@ -121,7 +121,7 @@ func _available_captures():
 	self.available_captures = {}
 	for x in range(SIZE):
 		for y in range(SIZE):
-			if self.board[x][y] != NO_MAN and bool(self.board[x][y]) != self.white_turn:
+			if self.board[x][y] != NO_MAN and bool(self.board[x][y]) != self.player1.is_playing():
 				var man = self.grid.get_cell(x, y).get_child(0).get_node("Man")
 				var man_captures = man.available_captures(board)
 				if not man_captures.is_empty():
@@ -134,7 +134,7 @@ func _available_moves():
 	self.available_moves = {}
 	for x in range(SIZE):
 		for y in range(SIZE):
-			if self.board[x][y] != NO_MAN and bool(self.board[x][y]) != self.white_turn:
+			if self.board[x][y] != NO_MAN and bool(self.board[x][y]) != self.player1.is_playing():
 				var man = self.grid.get_cell(x, y).get_child(0).get_node("Man")
 				var man_moves = man.available_moves(board)
 				if not man_moves.is_empty():
