@@ -122,7 +122,7 @@ func _available_captures():
 	for x in range(SIZE):
 		for y in range(SIZE):
 			if self.board[x][y] != NO_MAN and bool(self.board[x][y]) != self.player1.is_playing():
-				var man = self.grid.get_cell(x, y).get_child(0).get_node("Man")
+				var man = self.grid.get_cell(x, y).get_child(0).get_child(0)
 				var man_captures = man.available_captures(board)
 				if not man_captures.is_empty():
 					self.available_captures[vec2i_to_key(man.get_coordinates())] = man_captures
@@ -135,7 +135,7 @@ func _available_moves():
 	for x in range(SIZE):
 		for y in range(SIZE):
 			if self.board[x][y] != NO_MAN and bool(self.board[x][y]) != self.player1.is_playing():
-				var man = self.grid.get_cell(x, y).get_child(0).get_node("Man")
+				var man = self.grid.get_cell(x, y).get_child(0).get_child(0)
 				var man_moves = man.available_moves(board)
 				if not man_moves.is_empty():
 					self.available_moves[vec2i_to_key(man.get_coordinates())] = man.available_moves(board)

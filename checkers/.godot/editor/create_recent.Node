@@ -1,8 +1,10 @@
-Timer
+Button
 Label
+VBoxContainer
+ColorRect
+Timer
 Control
 MarginContainer
-VBoxContainer
 CenterContainer
 HBoxContainer
 TextureRect

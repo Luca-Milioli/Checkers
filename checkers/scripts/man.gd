@@ -5,8 +5,7 @@ class_name Man
 enum {PLAYER_MAN, IA_MAN, NO_MAN}
 
 var white
-var x
-var y
+var coordinates : Vector2i
 var _is_selected : bool
 const DEFAULT_MODULATE = Color(1,1,1,1)
 const CLICK_MODULATE = Color(0.4, 1, 0.8, 1)
@@ -15,24 +14,18 @@ const CLICK_MODULATE = Color(0.4, 1, 0.8, 1)
 func _ready() -> void:
 	self._is_selected = false
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass
-
-func set_white(white):
+func set_white(white: bool):
 	self.white = white
 
-func set_image():
-	print("a")
-	var path = "res://art/white_man.png" if self.white else "res://art/black_man.png"
+func set_image(path: String):
 	self.texture = load(path)
 
 func set_coordinates(x: int, y: int) -> void:
-	self.x = x
-	self.y = y
+	self.coordinates[0] = x
+	self.coordinates[1] = y
 	
 func get_coordinates() -> Vector2i:
-	return Vector2i(self.x, self.y)
+	return self.coordinates
 
 func select():
 	self.modulate = self.CLICK_MODULATE
@@ -51,8 +44,10 @@ func is_white():
 func _check_capture(move, board) -> bool:
 	if not _check_move(move, board):
 		return false
-	var captured_x = self.x - 1 if self.white else self.x + 1
-	var captured_y = self.y - 1 if self.y - 2 == move.y else self.y + 1
+	
+	var coord = self.get_coordinates()
+	var captured_x = coord[0] - 1 if self.white else coord[0] + 1
+	var captured_y = coord[1] - 1 if coord[1] - 2 == move.y else coord[1] + 1
 	var captured = board[captured_x][captured_y]
 	if captured == IA_MAN and self.white or captured == PLAYER_MAN and not self.white:
 		return true
@@ -61,10 +56,11 @@ func _check_capture(move, board) -> bool:
 func available_captures(board) -> Array:
 	var direction = -1 if self.white else 1
 	var avail_captures = []
-	var move = Vector2i(self.x + direction * 2, self.y + 2)
+	var coord = self.get_coordinates()
+	var move = Vector2i(coord[0] + direction * 2, coord[1] + 2)
 	if _check_capture(move, board):
 		avail_captures.push_back(move)
-	move.y = self.y - 2
+	move.y = coord[1] - 2
 	if _check_capture(move, board):
 		avail_captures.push_back(move)
 	return avail_captures
@@ -80,10 +76,11 @@ func _check_move(move, board) -> bool:
 func available_moves(board) -> Array:
 	var direction = -1 if self.white else 1
 	var avail_moves = []
-	var move = Vector2i(self.x + direction, self.y + 1)
+	var coord = self.get_coordinates()
+	var move = Vector2i(coord[0] + direction, coord[1] + 1)
 	if _check_move(move, board):
 		avail_moves.push_back(move)
-	move.y = self.y - 1
+	move.y = coord[1] - 1
 	if _check_move(move, board):
 		avail_moves.push_back(move)
 	return avail_moves

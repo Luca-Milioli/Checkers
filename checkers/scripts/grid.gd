@@ -41,10 +41,10 @@ func _create_man(x, y):
 	var color = self.board[x][y]
 	if color == PLAYER_MAN:
 		man.set_white(true)
-		man.set_image()
+		man.set_image("res://art/white_man.png")
 	elif color == IA_MAN:
 		man.set_white(false)
-		man.set_image()
+		man.set_image("res://art/black_man.png")
 	return [man_container, man]
 
 func get_cell(row: int, col: int) -> ColorRect:
@@ -94,8 +94,9 @@ func _on_piece_moved(old_cell, new_cell):
 	var moved_man_container = old_tile.get_child(0)
 	old_tile.remove_child(moved_man_container)
 	new_tile.add_child(moved_man_container)
-	var moved_man = moved_man_container.get_node("Man")
+	var moved_man = moved_man_container.get_child(0)
 	moved_man.set_coordinates(new_cell.x, new_cell.y)
+	print(moved_man.get_coordinates())
 	moved_man.deselect()
 
 func _on_capture(cell):
@@ -108,11 +109,18 @@ func _on_new_king(old_cell):
 	var tile = self.get_cell(old_cell.x, old_cell.y)
 	var man_container = tile.get_child(0)
 	var man = man_container.get_child(0)
-	var king = King.new()
+	var image = "res://art/white_king.png" if man.is_white() else "res://art/black_king.png"
+	
+	var king = TextureRect.new()
+	king.set_script(load("res://scripts/king.gd"))
+	king.set_image(image)
 	king.inherit_from_man(man)
+	
 	man_container.remove_child(man)
 	man.queue_free()
 	man_container.add_child(king)
+	king.set_name("King")
+	self.man_reference = king
 
 func _player_changed(white_turn):
 	self.white_turn = white_turn
