@@ -4,10 +4,5 @@ res://scenes/main.tscn
 res://scenes/man.tscn
 res://scenes/player.tscn
 res://scenes/tile.tscn
-res://scripts/main.gd
-res://scripts/game_logic.gd
 res://scripts/grid.gd
-res://scripts/king.gd
-res://scripts/man.gd
-res://scripts/player.gd
-res://scripts/tile.gd
+res://scripts/main.gd

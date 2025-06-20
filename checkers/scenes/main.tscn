@@ -1,9 +1,10 @@
-[gd_scene load_steps=9 format=3 uid="uid://durfvn0w6iv78"]
+[gd_scene load_steps=10 format=3 uid="uid://durfvn0w6iv78"]
 
 [ext_resource type="Script" uid="uid://bnpr32q7ct2m1" path="res://scripts/main.gd" id="1_pptng"]
 [ext_resource type="PackedScene" uid="uid://bmwwouhjteyui" path="res://scenes/board.tscn" id="1_qq4w8"]
 [ext_resource type="FontFile" uid="uid://fmy6dk7ybvpd" path="res://art/fonts/xolonium/xolonium-fonts-4.1/ttf/Xolonium-Bold.ttf" id="2_ly7go"]
 [ext_resource type="PackedScene" uid="uid://b53hwusjwh0mi" path="res://scenes/player.tscn" id="4_tsokc"]
+[ext_resource type="PackedScene" path="res://scenes/winner.tscn" id="5_g783o"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_hrhvo"]
 font = ExtResource("2_ly7go")
@@ -100,6 +101,9 @@ horizontal_alignment = 2
 [node name="Player1" parent="." instance=ExtResource("4_tsokc")]
 
 [node name="Player2" parent="." instance=ExtResource("4_tsokc")]
+
+[node name="WinnerControl" parent="." instance=ExtResource("5_g783o")]
+layout_mode = 1
 
 [connection signal="update_label" from="Player1" to="." method="_on_player_1_update_label"]
 [connection signal="update_label" from="Player2" to="." method="_on_player_2_update_label"]

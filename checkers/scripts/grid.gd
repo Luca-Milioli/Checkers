@@ -12,6 +12,7 @@ var selected_piece = null
 var man_reference: Man
 var white_turn = true # 1 white, 0 black
 var available_moves
+var appearence_only
 
 signal move_selected
 
@@ -21,6 +22,9 @@ func _ready():
 func connect_to_target(receiver):
 	self.move_selected.connect(receiver._on_move_selected)
 
+func set_appearence_only(appearence: bool = false):
+	self.appearence_only = appearence
+	
 func set_board(board):
 	self.board = board
 
@@ -71,16 +75,17 @@ func _create_matrix(rows, cols):
 		self.board.append(col)
 
 func _on_piece_clicked(piece):
-	var legal = white_turn == piece.is_white()
+	if not self.appearence_only:
+		var legal = white_turn == piece.is_white()
 
-	if self.man_reference:
-		self.man_reference.deselect()
-		_hide_moves_hint()
-		self.man_reference = null
-	if legal:
-		self.man_reference = piece
-		self.man_reference.select()
-		_show_moves_hint()
+		if self.man_reference:
+			self.man_reference.deselect()
+			_hide_moves_hint()
+			self.man_reference = null
+		if legal:
+			self.man_reference = piece
+			self.man_reference.select()
+			_show_moves_hint()
 
 func _on_tile_clicked(tile):
 	if not self.man_reference:
