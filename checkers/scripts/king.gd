@@ -23,7 +23,7 @@ func inherit_from_man(man: Man):
 	self.position = man.position
 	self.scale = man.scale
 	var coord = man.get_coordinates()
-	self.set_coordinates(coord[0], coord[1])
+	self.set_coordinates(coord.x, coord.y)
 	self.set_white(man.is_white())
 	self.modulate = man.modulate
 	self.visible = true
@@ -34,7 +34,7 @@ func _check_capture(move, board) -> bool:
 	var captured_x = self.coordinates.x - 1 if self.coordinates.x - 2 == move.x else self.coordinates.x + 1
 	var captured_y = self.coordinates.y - 1 if self.coordinates.y - 2 == move.y else self.coordinates.y + 1
 	var captured = board[captured_x][captured_y]
-	if captured == BLACK_MAN and self.white or captured == WHITE_MAN and not self.white:
+	if captured >= BLACK_MAN and self.white or captured <= WHITE_MAN and not self.white:
 		return true
 	return false
 
@@ -45,7 +45,7 @@ func available_captures(board):
 	var move = Vector2i(coord.x + backward * 2, coord.y + 2)
 	if _check_capture(move, board):
 		avail_captures.push_back(move)
-	move.y = coord[1] - 2
+	move.y = coord.y - 2
 	if _check_capture(move, board):
 		avail_captures.push_back(move)
 	return avail_captures
@@ -58,6 +58,6 @@ func available_moves(board):
 	if super._check_move(move, board):
 		avail_moves.push_back(move)
 	move.y = coord.y - 1
-	if _check_move(move, board):
+	if super._check_move(move, board):
 		avail_moves.push_back(move)
 	return avail_moves

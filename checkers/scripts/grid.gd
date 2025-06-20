@@ -11,6 +11,7 @@ var board = []
 var selected_piece = null
 var man_reference: Man
 var white_turn = true # 1 white, 0 black
+var available_moves
 
 signal move_selected
 
@@ -74,10 +75,12 @@ func _on_piece_clicked(piece):
 
 	if self.man_reference:
 		self.man_reference.deselect()
+		_hide_moves_hint()
 		self.man_reference = null
 	if legal:
 		self.man_reference = piece
 		self.man_reference.select()
+		_show_moves_hint()
 
 func _on_tile_clicked(tile):
 	if not self.man_reference:
@@ -97,6 +100,7 @@ func _on_piece_moved(old_cell, new_cell):
 	var moved_man = moved_man_container.get_child(0)
 	moved_man.set_coordinates(new_cell.x, new_cell.y)
 	moved_man.deselect()
+	_hide_moves_hint()
 
 func _on_capture(cell):
 	var tile = self.get_cell(cell.x, cell.y)
@@ -116,7 +120,25 @@ func _on_new_king(old_cell):
 	man_container.remove_child(man)
 	man.queue_free()
 	man_container.add_child(king)
-	#self.man_reference = king
+	self.man_reference = king
 
 func _player_changed(white_turn):
 	self.white_turn = white_turn
+
+func _on_new_moves(moves: Dictionary):
+	self.available_moves = moves
+
+func _show_moves_hint():
+	var man_coord = self.man_reference.get_coordinates()
+	for k in available_moves:
+		if from_string_to_Vec2i(k) == man_coord:
+			for move in available_moves[k]:
+				self.get_cell(move.x, move.y).show_move_hint()
+
+func _hide_moves_hint():
+	for i in range(SIZE):
+		for j in range(SIZE):
+			self.get_cell(i, j).hide_move_hint()
+
+func from_string_to_Vec2i(s: String) -> Vector2i:
+	return Vector2i(int(s[0]), int(s[2]))

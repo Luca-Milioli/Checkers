@@ -5,6 +5,7 @@ signal player_changed(player)
 signal piece_moved(new_cell)
 signal capture(cell)
 signal new_king(old_cell)
+signal new_moves(moves)
 
 const SIZE = 8
 enum {WHITE_MAN, WHITE_KING, NO_MAN, BLACK_MAN, BLACK_KING}
@@ -28,6 +29,7 @@ func connect_to_target(receiver):
 	self.piece_moved.connect(receiver._on_piece_moved)
 	self.capture.connect(receiver._on_capture)
 	self.new_king.connect(receiver._on_new_king)
+	self.new_moves.connect(receiver._on_new_moves)
 
 func setup_matrix() -> void:
 	_create_matrix(SIZE, SIZE)
@@ -54,8 +56,6 @@ func _create_matrix(rows, cols):
 		self.board.append(col)
 
 func _check_move() -> bool:
-	print(available_captures)
-	print(old_cell, new_cell)
 	var old_cell_key = make_key(self.old_cell.x, self.old_cell.y)
 	if self.available_captures.has(old_cell_key) and self.available_captures[old_cell_key].has(self.new_cell)\
 		or self.available_moves.has(old_cell_key) and self.available_moves[old_cell_key].has(self.new_cell):
@@ -80,14 +80,14 @@ func _change_turn():
 	self.player_changed.emit(self.player1.is_playing())
 
 func _make_move():
-	var move_made = 0
+	var move_made = false
 	var multi_move = true
-	while move_made < 3 and multi_move:
+	while multi_move:
 		await self.move_ready
 		if _check_move():
 			_set_move()
 			self.piece_moved.emit(old_cell, new_cell)
-			move_made += 1
+			move_made = true
 			multi_move = not self.available_captures.is_empty()
 			if multi_move:
 				var captures = _single_man_available_captures(new_cell.x, new_cell.y)
@@ -96,7 +96,7 @@ func _make_move():
 				else:
 					self.available_captures = {}
 				multi_move = not self.available_captures.is_empty()
-	return move_made > 0
+	return move_made
 
 func _check_winner() -> int:
 	if available_captures.is_empty() and available_moves.is_empty():
@@ -104,10 +104,14 @@ func _check_winner() -> int:
 	return 0
 	
 func _update_available_moves():
+	var all_moves
 	if not _new_available_captures():
 		_new_available_moves()
+		all_moves = self.available_moves
 	else:
 		available_moves = {}
+		all_moves = self.available_captures
+	self.new_moves.emit(all_moves)
 	
 func game_start():
 	self.player1.set_playing(true)

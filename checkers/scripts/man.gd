@@ -44,7 +44,13 @@ func is_selected():
 
 func is_white():
 	return self.white
-	
+
+func _calculate_captures(move, board) -> Array:
+	var captures = []
+	while _check_capture(move, board):
+		captures.push_back(move)
+	return captures
+
 func _check_capture(move, board) -> bool:
 	if not _check_move(move, board):
 		return false

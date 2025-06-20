@@ -10,3 +10,4 @@ res://scripts/grid.gd
 res://scripts/king.gd
 res://scripts/man.gd
 res://scripts/player.gd
+res://scripts/tile.gd
