@@ -7,7 +7,7 @@ signal capture(cell)
 signal new_king(old_cell)
 
 const SIZE = 8
-enum {PLAYER_MAN, IA_MAN, NO_MAN}
+enum {WHITE_MAN, WHITE_KING, NO_MAN, BLACK_MAN, BLACK_KING}
 
 var board = []
 var grid : Board
@@ -16,14 +16,13 @@ var player1 : Player
 var player2: Player
 var old_cell : Vector2i
 var new_cell : Vector2i
-var available_moves
-var available_captures
-
+var available_moves = {}
+var available_captures = {}
 
 func set_players(player1: Player, player2: Player):
 	self.player1 = player1
 	self.player2 = player2
-	
+
 func connect_to_target(receiver):
 	self.player_changed.connect(receiver._player_changed)
 	self.piece_moved.connect(receiver._on_piece_moved)
@@ -37,9 +36,9 @@ func setup_matrix() -> void:
 			board[x][y] = NO_MAN
 			if (not bool((x + y)%2)):
 				if x < 3:
-					board[x][y] = IA_MAN
+					board[x][y] = BLACK_MAN
 				elif x > 4:
-					board[x][y] = PLAYER_MAN
+					board[x][y] = WHITE_MAN
 
 func print_board():
 	print("PLAYER: 0\nIA: 1\nVOID: 2\n")
@@ -55,34 +54,49 @@ func _create_matrix(rows, cols):
 		self.board.append(col)
 
 func _check_move() -> bool:
-	var old_cell_key = vec2i_to_key(self.old_cell)
+	print(available_captures)
+	print(old_cell, new_cell)
+	var old_cell_key = make_key(self.old_cell.x, self.old_cell.y)
 	if self.available_captures.has(old_cell_key) and self.available_captures[old_cell_key].has(self.new_cell)\
 		or self.available_moves.has(old_cell_key) and self.available_moves[old_cell_key].has(self.new_cell):
 			return true
 	return false
 
 func _set_move():
-	var white_turn = self.player1.is_playing()
+	var man_moving = self.board[self.old_cell.x][self.old_cell.y]
+	self.board[self.new_cell.x][self.new_cell.y] = man_moving
 	self.board[self.old_cell.x][self.old_cell.y] = NO_MAN
-	self.board[self.new_cell.x][self.new_cell.y] = int(not white_turn)
 	if abs(new_cell.y - old_cell.y) == 2:		# capture
 		var capture_cell = Vector2i(max(self.old_cell.x, self.new_cell.x) - 1, max(self.old_cell.y, self.new_cell.y) - 1)
 		self.board[capture_cell.x][capture_cell.y] = NO_MAN
 		self.capture.emit(capture_cell)
-	if new_cell.x == 7 and not white_turn or new_cell.x == 0 and white_turn:
+	if new_cell.x == SIZE - 1 and man_moving == BLACK_MAN or new_cell.x == 0 and man_moving == WHITE_MAN:
+		self.board[self.new_cell.x][self.new_cell.y] = WHITE_KING if self.player1.is_playing() else BLACK_KING
 		self.new_king.emit(old_cell)
 
 func _change_turn():
-	self.player1.set_playing(!self.player1.is_playing())
-	self.player2.set_playing(!self.player2.is_playing())
+	self.player1.set_playing(not self.player1.is_playing())
+	self.player2.set_playing(not self.player2.is_playing())
 	self.player_changed.emit(self.player1.is_playing())
 
 func _make_move():
-	await self.move_ready
-	if _check_move():
-		_set_move()
-		return true
-	return false
+	var move_made = 0
+	var multi_move = true
+	while move_made < 3 and multi_move:
+		await self.move_ready
+		if _check_move():
+			_set_move()
+			self.piece_moved.emit(old_cell, new_cell)
+			move_made += 1
+			multi_move = not self.available_captures.is_empty()
+			if multi_move:
+				var captures = _single_man_available_captures(new_cell.x, new_cell.y)
+				if not captures.is_empty():
+					self.available_captures[make_key(new_cell.x, new_cell.y)] = captures
+				else:
+					self.available_captures = {}
+				multi_move = not self.available_captures.is_empty()
+	return move_made > 0
 
 func _check_winner() -> int:
 	if available_captures.is_empty() and available_moves.is_empty():
@@ -90,21 +104,21 @@ func _check_winner() -> int:
 	return 0
 	
 func _update_available_moves():
-	if not _available_captures():
-		_available_moves()
+	if not _new_available_captures():
+		_new_available_moves()
 	else:
 		available_moves = {}
 	
 func game_start():
 	self.player1.set_playing(true)
-	self.player2.set_playing(false) 
+	self.player2.set_playing(false)
 	_update_available_moves()
 	while not self.winner:
 		if await _make_move():
-			self.piece_moved.emit(old_cell, new_cell)
 			_change_turn()
 			_update_available_moves()
 			self.winner = _check_winner()
+	print(self.winner)
 
 func get_board():
 	return self.board
@@ -116,29 +130,33 @@ func _on_move_selected(old, new):
 	self.old_cell = old
 	self.new_cell = new
 	self.move_ready.emit()
-	
-func _available_captures():
+
+func _single_man_available_captures(x, y):
+	return self.grid.get_cell(x, y).get_child(0).get_child(0).available_captures(self.board)
+
+func _new_available_captures():
 	self.available_captures = {}
 	for x in range(SIZE):
 		for y in range(SIZE):
-			if self.board[x][y] != NO_MAN and bool(self.board[x][y]) != self.player1.is_playing():
-				var man = self.grid.get_cell(x, y).get_child(0).get_child(0)
-				var man_captures = man.available_captures(board)
+			if self.board[x][y] != NO_MAN and (self.board[x][y] <= WHITE_KING) == self.player1.is_playing():
+				var man_captures = _single_man_available_captures(x, y)
 				if not man_captures.is_empty():
-					self.available_captures[vec2i_to_key(man.get_coordinates())] = man_captures
+					self.available_captures[make_key(x, y)] = man_captures
 	if self.available_captures.is_empty():
 		return false
 	return true
 
-func _available_moves():
+func _single_man_available_moves(x, y):
+	return self.grid.get_cell(x, y).get_child(0).get_child(0).available_moves(self.board)
+
+func _new_available_moves():
 	self.available_moves = {}
 	for x in range(SIZE):
 		for y in range(SIZE):
-			if self.board[x][y] != NO_MAN and bool(self.board[x][y]) != self.player1.is_playing():
-				var man = self.grid.get_cell(x, y).get_child(0).get_child(0)
-				var man_moves = man.available_moves(board)
+			if self.board[x][y] != NO_MAN and (self.board[x][y] <= WHITE_KING) == self.player1.is_playing():
+				var man_moves = _single_man_available_moves(x, y)
 				if not man_moves.is_empty():
-					self.available_moves[vec2i_to_key(man.get_coordinates())] = man.available_moves(board)
+					self.available_moves[make_key(x, y)] = man_moves
 
-func vec2i_to_key(v: Vector2i) -> String:
-	return "%d,%d" % [v.x, v.y]
+func make_key(x, y) -> String:
+	return "%d,%d" % [x, y]

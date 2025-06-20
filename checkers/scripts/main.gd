@@ -22,7 +22,6 @@ func _ready():
 	self.logic.setup_matrix()
 	self.logic.connect_to_target(self.gui)
 	self.logic.set_grid(self.gui)
-	
 	self.gui.connect_to_target(self.logic)
 	self.gui.setup_gui(self.logic.get_board())
 	

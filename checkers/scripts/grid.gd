@@ -6,7 +6,7 @@ const TILE_SCENE = preload("res://scenes/tile.tscn")
 const MAN_SCENE = preload("res://scenes/man.tscn")
 
 const SIZE = 8
-enum {PLAYER_MAN, IA_MAN, NO_MAN}
+enum {WHITE_MAN, WHITE_KING, NO_MAN, BLACK_MAN, BLACK_KING}
 var board = []
 var selected_piece = null
 var man_reference: Man
@@ -27,7 +27,7 @@ func _create_tile(x, y):
 	var tile = TILE_SCENE.instantiate()
 	tile.connect("tile_clicked", Callable(self, "_on_tile_clicked"))
 	tile.set_coordinates(x, y)
-	tile.set_dark(not bool((x + y)%2))
+	tile.set_dark(not bool((x + y) % 2))
 	if self.board[x][y] != NO_MAN:
 		var container_and_man = _create_man(x, y)
 		container_and_man[1].set_coordinates(x, y)
@@ -39,10 +39,10 @@ func _create_man(x, y):
 	man_container.connect("piece_clicked", Callable(self, "_on_piece_clicked"))	
 	var man = man_container.get_node("Man")
 	var color = self.board[x][y]
-	if color == PLAYER_MAN:
+	if color == WHITE_MAN:
 		man.set_white(true)
 		man.set_image("res://art/white_man.png")
-	elif color == IA_MAN:
+	elif color == BLACK_MAN:
 		man.set_white(false)
 		man.set_image("res://art/black_man.png")
 	return [man_container, man]
@@ -71,14 +71,14 @@ func _create_matrix(rows, cols):
 
 func _on_piece_clicked(piece):
 	var legal = white_turn == piece.is_white()
-	
+
 	if self.man_reference:
 		self.man_reference.deselect()
 		self.man_reference = null
 	if legal:
 		self.man_reference = piece
 		self.man_reference.select()
-		
+
 func _on_tile_clicked(tile):
 	if not self.man_reference:
 		return
@@ -96,7 +96,6 @@ func _on_piece_moved(old_cell, new_cell):
 	new_tile.add_child(moved_man_container)
 	var moved_man = moved_man_container.get_child(0)
 	moved_man.set_coordinates(new_cell.x, new_cell.y)
-	print(moved_man.get_coordinates())
 	moved_man.deselect()
 
 func _on_capture(cell):
@@ -110,17 +109,14 @@ func _on_new_king(old_cell):
 	var man_container = tile.get_child(0)
 	var man = man_container.get_child(0)
 	var image = "res://art/white_king.png" if man.is_white() else "res://art/black_king.png"
-	
 	var king = TextureRect.new()
 	king.set_script(load("res://scripts/king.gd"))
 	king.set_image(image)
 	king.inherit_from_man(man)
-	
 	man_container.remove_child(man)
 	man.queue_free()
 	man_container.add_child(king)
-	king.set_name("King")
-	self.man_reference = king
+	#self.man_reference = king
 
 func _player_changed(white_turn):
 	self.white_turn = white_turn
