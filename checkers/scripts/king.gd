@@ -10,6 +10,12 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	pass
 
+func inherit_from_man(man):
+	var coordinates = man.get_coordinates()
+	super.set_coordinates(coordinates.x, coordinates.y)
+	super.set_white(man.is_white())
+	set_image()
+
 func available_captures(board):
 	var avail_captures = super.available_captures(board)
 	var backward = 1 if self.white else -1

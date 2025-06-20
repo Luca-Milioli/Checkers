@@ -40,9 +40,11 @@ func _create_man(x, y):
 	var man = man_container.get_node("Man")
 	var color = self.board[x][y]
 	if color == PLAYER_MAN:
-		man.set_image(true)
+		man.set_white(true)
+		man.set_image()
 	elif color == IA_MAN:
-		man.set_image(false)
+		man.set_white(false)
+		man.set_image()
 	return [man_container, man]
 
 func get_cell(row: int, col: int) -> ColorRect:
@@ -104,9 +106,13 @@ func _on_capture(cell):
 
 func _on_new_king(old_cell):
 	var tile = self.get_cell(old_cell.x, old_cell.y)
-	var new_king_container = tile.get_child(0)
-	#tile.remove_child(new_king_container)
-	#tile.add_child()
+	var man_container = tile.get_child(0)
+	var man = man_container.get_child(0)
+	var king = King.new()
+	king.inherit_from_man(man)
+	man_container.remove_child(man)
+	man.queue_free()
+	man_container.add_child(king)
 
 func _player_changed(white_turn):
 	self.white_turn = white_turn
