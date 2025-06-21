@@ -122,7 +122,7 @@ func game_start():
 			_change_turn()
 			_update_available_moves()
 			self.winner = _check_winner()
-	print(self.winner)
+	return self.winner
 
 func get_board():
 	return self.board
