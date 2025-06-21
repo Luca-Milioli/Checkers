@@ -7,3 +7,4 @@ res://scenes/player.tscn
 res://scripts/main.gd
 res://scenes/winner.tscn
 res://scripts/game_logic.gd
+res://scripts/grid.gd

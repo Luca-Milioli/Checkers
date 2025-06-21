@@ -96,12 +96,30 @@ func _on_tile_clicked(tile):
 		if(self.man_reference.is_selected()):
 			self.move_selected.emit(man_coord, tile_coord)
 
+func _moving_animation(moving_object, starting_pos, ending_pos):
+	self.add_child(moving_object)
+	
+	var tween = create_tween()
+	tween.set_ease(Tween.EASE_IN_OUT)
+	moving_object.global_position = starting_pos
+	tween.tween_property(moving_object, "global_position", ending_pos, 4)
+	await tween.finished
+	
+	self.remove_child(moving_object)
+	
+	
 func _on_piece_moved(old_cell, new_cell):
+	
 	var old_tile = self.get_cell(old_cell.x, old_cell.y)
 	var new_tile = self.get_cell(new_cell.x, new_cell.y)
+	
 	var moved_man_container = old_tile.get_child(0)
+	# la global position è sempre 0 0 sus
+	await self._moving_animation(moved_man_container.duplicate(), old_tile.global_position, new_tile.global_position)
+	
 	old_tile.remove_child(moved_man_container)
 	new_tile.add_child(moved_man_container)
+	
 	var moved_man = moved_man_container.get_child(0)
 	moved_man.set_coordinates(new_cell.x, new_cell.y)
 	moved_man.deselect()
