@@ -2,10 +2,11 @@ class_name GameLogic
 
 signal move_ready
 signal player_changed(player)
-signal piece_moved(new_cell)
+signal piece_moved(old_cell, new_cell, done)
 signal capture(cell)
 signal new_king(old_cell)
 signal new_moves(moves)
+signal animation_done
 
 const SIZE = 8
 enum {WHITE_MAN, WHITE_KING, NO_MAN, BLACK_MAN, BLACK_KING}
@@ -86,7 +87,8 @@ func _make_move():
 		await self.move_ready
 		if _check_move():
 			_set_move()
-			self.piece_moved.emit(old_cell, new_cell)
+			self.piece_moved.emit(old_cell, new_cell, self.animation_done)
+			await self.animation_done
 			move_made = true
 			multi_move = not self.available_captures.is_empty()
 			if multi_move:
