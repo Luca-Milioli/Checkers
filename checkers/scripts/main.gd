@@ -9,11 +9,12 @@ var logic : GameLogic
 var retry_button
 var quit_button
 var tween
+const DEFAULT_VOLUME = -10
 
 signal game_finished
 
 func _ready():
-	
+	$Menu_theme.volume_db = DEFAULT_VOLUME
 	self.retry_button = get_node("Menu/VBoxContainer/HboxContainer/PlayAgain")
 	self.quit_button = get_node("Menu/VBoxContainer/HboxContainer/Quit")
 	
@@ -24,12 +25,12 @@ func _ready():
 	
 func _game_setup():
 	self.player1.inizialize("Peashooter", 12, true, false)
-	self.player1.set_time_left(600)
+	self.player1.set_time_left(6)
 	$VBoxContainer/BotHUD/Player1.text = self.player1.get_ign()
 	$VBoxContainer/BotHUD/Player1Timer.text = self.player1.format_time()
 	
 	self.player2.inizialize("Zombie", 12, false, false)
-	self.player2.set_time_left(600)
+	self.player2.set_time_left(60)
 	$VBoxContainer/TopHUD/Player2.text = self.player2.get_ign()
 	$VBoxContainer/TopHUD/Player2Timer.text = self.player2.format_time()
 	
@@ -44,10 +45,10 @@ func _game_setup():
 	self.gui.connect_to_target(self.logic)
 	self.gui.setup_gui(self.logic.get_board())
 	
+	self._fade_in_music()
 	self._menu_animation()
 	
 func _menu_animation():
-	$Menu_theme.play()
 	self.menu_scene.visible = true
 	self.tween = create_tween()
 	self.tween.set_parallel(true)
@@ -63,9 +64,9 @@ func _play_animation():
 	self.tween.connect("finished", func(): self.menu_scene.visible = false)
 
 func _play(restart = false):
-	var tween = create_tween()
-	tween.tween_property($Menu_theme, "volume_db", -100, 12)
 	self.gui.set_appearence_only(false)
+	
+	self._fade_out_music()
 	self._play_animation()
 
 	self.logic.game_start(self.game_finished)
@@ -83,13 +84,31 @@ func _play(restart = false):
 			winnertext = "Draw"
 			$Draw.play()
 	
+	
 	self.quit_button.disabled = false
 	self.retry_button.disabled = false
 	self.retry_button.text = "Play again"
 	$Menu/VBoxContainer/WinnerText.text = winnertext
 	
+	self._fade_in_music()
 	self._menu_animation()
-	
+
+func _fade_out_music():
+	if $Menu_theme.playing:
+		var t = create_tween()
+		t.tween_property($Menu_theme, "volume_db", -80, 8)
+		await t.finished
+		$Menu_theme.stop()
+		$Menu_theme.volume_db = DEFAULT_VOLUME
+
+func _fade_in_music():
+	print("ss")
+	if not $Menu_theme.playing:
+		$Menu_theme.volume_db = -80
+		$Menu_theme.play()
+		var t = create_tween()
+		t.tween_property($Menu_theme, "volume_db", DEFAULT_VOLUME, 0.5)
+
 func _on_player_1_update_label() -> void:
 	$VBoxContainer/BotHUD/Player1Timer.text = self.player1.format_time()
 
