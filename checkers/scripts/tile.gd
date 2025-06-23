@@ -20,7 +20,7 @@ func _draw():
 	if show_circle:
 		var radius = min(size.x, size.y) * 0.2
 		var center = size / 2
-		draw_circle(center, radius, Color(0, 0.8, 0.2, 0.8))
+		draw_circle(center, radius, Color(0.5, 0.82, 0.5, 0.8))
 
 func show_move_hint():
 	show_circle = true

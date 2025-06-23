@@ -10,12 +10,7 @@ var retry_button
 var quit_button
 var tween
 
-# TODO
-# 1: LA PRIORITà DI CATTURA SI DEVE METTERE ANCHE AL DAMONE
-# 2: SE UN PLAYER è BLOCCATO HA VINTO L'ALTRO (SE NON SONO ENTRAMBI BLOCCATI)
-# 3: WIN PER TEMPO
-# 4: RIPETIZIONE
-# 6: QUANDO SI PROMUOVE NON PUOI CONTINUARE UNA CATTURA MULTIPLA IN QUEL TURNO
+signal game_finished
 
 func _ready():
 	
@@ -40,6 +35,8 @@ func _game_setup():
 	
 	self.logic  = GameLogic.new()
 	self.logic.set_players(player1, player2)
+	self.player1.connect_to_target(self.logic)
+	self.player2.connect_to_target(self.logic)
 	self.logic.setup_matrix()
 	self.logic.connect_to_target(self.gui)
 	self.logic.set_grid(self.gui)
@@ -50,6 +47,7 @@ func _game_setup():
 	self._menu_animation()
 	
 func _menu_animation():
+	$Menu_theme.play()
 	self.menu_scene.visible = true
 	self.tween = create_tween()
 	self.tween.set_parallel(true)
@@ -60,23 +58,30 @@ func _play_animation():
 	self.tween.kill()
 	self.tween = create_tween()
 	self.tween.set_parallel(true)
-	self.tween.tween_property($VBoxContainer, "modulate", Color(1, 1, 1, 1), 1.7)
+	self.tween.tween_property($VBoxContainer, "modulate", Color(1, 1, 1, 1), 1)
 	self.tween.tween_property(self.menu_scene, "modulate", Color(1, 1, 1, 0), 0.5)
 	self.tween.connect("finished", func(): self.menu_scene.visible = false)
 
 func _play(restart = false):
+	var tween = create_tween()
+	tween.tween_property($Menu_theme, "volume_db", -100, 12)
 	self.gui.set_appearence_only(false)
 	self._play_animation()
-	var winner = await self.logic.game_start()
-	
+
+	self.logic.game_start(self.game_finished)
+	await self.game_finished
+	var winner = self.logic.get_winner()
 	var winnertext: String
 	match winner:
 		1:
 			winnertext = player1.get_ign() + " won!"
+			$Win.play()
 		2:
 			winnertext = player2.get_ign() + " won!"
+			$Win.play()
 		_:
 			winnertext = "Draw"
+			$Draw.play()
 	
 	self.quit_button.disabled = false
 	self.retry_button.disabled = false

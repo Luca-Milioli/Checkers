@@ -34,7 +34,7 @@ func _check_capture(move, board) -> bool:
 	var captured_x = self.coordinates.x - 1 if self.coordinates.x - 2 == move.x else self.coordinates.x + 1
 	var captured_y = self.coordinates.y - 1 if self.coordinates.y - 2 == move.y else self.coordinates.y + 1
 	var captured = board[captured_x][captured_y]
-	if captured >= BLACK_MAN and self.white or captured <= WHITE_MAN and not self.white:
+	if captured >= BLACK_MAN and self.white or captured <= WHITE_KING and not self.white:
 		return true
 	return false
 

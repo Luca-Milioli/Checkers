@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://xewxamx0r5uq"
+path="res://.godot/imported/Overworld Lofi.mp3-3aac5c19d14653079d4fcd08f7f80473.mp3str"
+
+[deps]
+
+source_file="res://art/sounds/Overworld Lofi.mp3"
+dest_files=["res://.godot/imported/Overworld Lofi.mp3-3aac5c19d14653079d4fcd08f7f80473.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

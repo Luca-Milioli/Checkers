@@ -6,6 +6,10 @@ class_name PlayerPlusTimer
 
 var _time_left : float
 signal update_label
+signal time_finished
+
+func connect_to_target(receiver):
+	self.time_finished.connect(receiver._on_time_finished)
 
 func set_time_left(time_left: float):
 	self._time_left = time_left
@@ -26,8 +30,8 @@ func set_playing(playing: bool):
 		$Updater.stop()
 
 func _on_updater_timeout() -> void:
-	# self.set_time_left(self.get_time_left() - 1)
 	self._time_left -= $Updater.wait_time
 	self.update_label.emit()
-	
-	
+	if self._time_left <= 0:
+		self.time_finished.emit(self.is_white())
+		$Updater.stop()

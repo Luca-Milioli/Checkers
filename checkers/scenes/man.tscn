@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://m15pmhxfyt8t"]
 
-[ext_resource type="Script" uid="uid://8jw0p8b37fh8" path="res://scripts/man_container.gd" id="1_xkol3"]
-[ext_resource type="Script" uid="uid://h7doekuerj80" path="res://scripts/man.gd" id="3_fo7j3"]
+[ext_resource type="Script" path="res://scripts/man_container.gd" id="1_xkol3"]
+[ext_resource type="Script" path="res://scripts/man.gd" id="3_fo7j3"]
 
 [node name="ManContainer" type="Control"]
 layout_mode = 3

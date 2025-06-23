@@ -66,6 +66,10 @@ func setup_gui(new_board):
 	for x in range(SIZE):
 		for y in range(SIZE):
 			_create_tile(x, y)
+	var children = self.get_child_count()
+	self.move_child($Move, children - 1)
+	self.move_child($Capture, children - 1)
+	self.move_child($Promotion, children - 1)
 
 func _create_matrix(rows, cols):
 	for x in range(rows):
@@ -77,7 +81,7 @@ func _create_matrix(rows, cols):
 func _on_piece_clicked(piece):
 	if not self.appearence_only:
 		var legal = white_turn == piece.is_white()
-
+		
 		if self.man_reference:
 			self.man_reference.deselect()
 			_hide_moves_hint()
@@ -96,12 +100,14 @@ func _on_tile_clicked(tile):
 		if(self.man_reference.is_selected()):
 			self.move_selected.emit(man_coord, tile_coord)
 
-func _moving_animation(moving_object, ending_pos, param = "global_position", time = 4):
-	moving_object.visible = true
-	
+func _animations(object, ending_value, param = "global_position", time = 0.2):
+	object.visible = true
+	if object is Control:
+		object.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		
 	var tween = create_tween()
 	tween.set_ease(Tween.EASE_IN_OUT)
-	tween.tween_property(moving_object, param, ending_pos, time)
+	tween.tween_property(object, param, ending_value, time)
 	await tween.finished
 	
 func _on_piece_moved(old_cell, new_cell, done):
@@ -111,17 +117,21 @@ func _on_piece_moved(old_cell, new_cell, done):
 	var moved_man_container = old_tile.get_child(0)
 	var tmp_copy = moved_man_container.duplicate()
 	tmp_copy.z_index = 1
-	#moved_man_container.visible = false
-	new_tile.add_child(moved_man_container)
 	
 	old_tile.remove_child(moved_man_container)
+	
 	old_tile.add_child(tmp_copy)
 	
-	await self._moving_animation(tmp_copy, new_tile.global_position)
+	
+	var offset = old_tile.global_position - tmp_copy.global_position
+	var new_position = new_tile.global_position - offset
+	$Move.play()
+	await self._animations(tmp_copy, new_position)
 	old_tile.remove_child(tmp_copy)
 	tmp_copy.queue_free()
 	
-	moved_man_container.visible = true
+	new_tile.add_child(moved_man_container)
+	
 	var moved_man = moved_man_container.get_child(0)
 	moved_man.set_coordinates(new_cell.x, new_cell.y)
 	moved_man.deselect()
@@ -132,10 +142,16 @@ func _on_piece_moved(old_cell, new_cell, done):
 func _on_capture(cell):
 	var tile = self.get_cell(cell.x, cell.y)
 	var captured_man_container = tile.get_child(0)
+	$Capture.play()
+	
+	await _animations(captured_man_container, Color(1,1,1,0), "modulate", 0.8)
+	 
 	tile.remove_child(captured_man_container)
 	captured_man_container.queue_free()
+	
 
 func _on_new_king(old_cell):
+	$Promotion.play()
 	var tile = self.get_cell(old_cell.x, old_cell.y)
 	var man_container = tile.get_child(0)
 	var man = man_container.get_child(0)
