@@ -1,0 +1,17 @@
+res://art/fonts/architect-s-daughter/ArchitectsDaughter32.tres::d168be01385db542e77ba061051ec24a::1750680295::res://.godot/exported/133200997/export-b177886870bf6ade4e0153abc78be817-ArchitectsDaughter32.res
+res://art/fonts/cmu-typewriter/Typewriter.tres::d122195c14506123320bf637686ad38a::1750680295::res://.godot/exported/133200997/export-054428b4e34e320e3b8958a39c9403f6-Typewriter.res
+res://art/fonts/connection_ii/ConnectionII.tres::41bd0b07165f2ef4ac454c07e2192200::1750680295::res://.godot/exported/133200997/export-cdc0647769ba287df77fcb861140e7ac-ConnectionII.res
+res://art/fonts/droid-sans/DroidSans.tres::81458d505e6922af98276b537045ec8d::1750680295::res://.godot/exported/133200997/export-83461751c3828785cb251cc9ee19dd82-DroidSans.res
+res://art/fonts/kirifont/Kirifont.tres::a20d4eec2b71b865a3a3287c5e8ae58e::1750680295::res://.godot/exported/133200997/export-3abc684ed4c8d459fea518e218cf9dfa-Kirifont.res
+res://art/fonts/linux-libertine/LinuxLibertine.tres::2a8effb4678cfb6f2429db9fe93d3213::1750680296::res://.godot/exported/133200997/export-b5900c365161c3ee34412e4c04dfc026-LinuxLibertine.res
+res://art/fonts/montreal/Montreal.tres::df8e846938c049dcf65aa65a74017af6::1750680296::res://.godot/exported/133200997/export-518437fbb89595ebffdedeeda2c712bf-Montreal.res
+res://art/fonts/poco/Poco.tres::0a80cdcb4a9614b8def36ed81b7b9781::1750680296::res://.godot/exported/133200997/export-c220bac5846ab44218274d57c08c7ae2-Poco.res
+res://art/fonts/source-code-pro/SourceCodePro.tres::622ed919a902b3cf6ab12a3d4294bdbe::1750680296::res://.godot/exported/133200997/export-95a73a7da9a80f67698927dd16a51588-SourceCodePro.res
+res://art/fonts/xolonium/Xolonium.tres::59155f86e99f9578554f2dca7b3e72c9::1750680297::res://.godot/exported/133200997/export-da2e86993cc70a6b6b715217a0bd5949-Xolonium.res
+res://scenes/board.tscn::f64d529737a0bc2f7ff95481f3be5d76::1750690485::res://.godot/exported/133200997/export-7af1610c67933587f82174b6bfa726df-board.scn
+res://scenes/king.tscn::bd884452fd1182b64d7f7fa060a4072f::1750680298::res://.godot/exported/133200997/export-1dd33e9e3a1e614d3081b632b9863313-king.scn
+res://scenes/main.tscn::66495560560efc839a839d21bcf5cad6::1750690485::res://.godot/exported/133200997/export-3ad5c15c4f3250da0cc7c1af1770d85f-main.scn
+res://scenes/man.tscn::450f509210683f8ea7d159c83034f530::1750680298::res://.godot/exported/133200997/export-30d2435a1d8ec88219266070112ef264-man.scn
+res://scenes/player.tscn::687dc609c3f244a83e1e94fb0abf3498::1750680298::res://.godot/exported/133200997/export-234fb6894ec6226e856ab7f825500d3d-player.scn
+res://scenes/tile.tscn::e6759bf9cc18b5dedc17578e9d1fa70d::1750690485::res://.godot/exported/133200997/export-5d2a3c63dd2027cc5cceb245328e5953-tile.scn
+res://scenes/winner.tscn::77593ed023d1ce700a0235208e029985::1750680298::res://.godot/exported/133200997/export-1f23b3ed18033bf377a4f4576d633fd3-winner.scn

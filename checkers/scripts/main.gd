@@ -77,6 +77,8 @@ func _play(restart = false):
 
 	self.logic.game_start(self.game_finished)
 	await self.game_finished
+	self.player1.stop_timer()
+	self.player2.stop_timer()
 	var winner = self.logic.get_winner()
 	var winnertext: String
 	match winner:

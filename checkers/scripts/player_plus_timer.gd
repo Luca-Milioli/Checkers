@@ -33,7 +33,11 @@ func set_playing(playing: bool):
 	if playing:
 		$Updater.start()
 	else:
-		$Updater.stop()
+		stop_timer()
+
+
+func stop_timer():
+	$Updater.stop()
 
 
 func _on_updater_timeout() -> void:
@@ -41,4 +45,3 @@ func _on_updater_timeout() -> void:
 	self.update_label.emit()
 	if self._time_left <= 0:
 		self.time_finished.emit(self.is_white())
-		$Updater.stop()
