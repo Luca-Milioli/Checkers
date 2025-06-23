@@ -24,12 +24,12 @@ func _ready():
 	_game_setup()
 	
 func _game_setup():
-	self.player1.inizialize("Peashooter", 12, true, false)
-	self.player1.set_time_left(6)
+	self.player1.inizialize("Plants", 12, true, false)
+	self.player1.set_time_left(60)
 	$VBoxContainer/BotHUD/Player1.text = self.player1.get_ign()
 	$VBoxContainer/BotHUD/Player1Timer.text = self.player1.format_time()
 	
-	self.player2.inizialize("Zombie", 12, false, false)
+	self.player2.inizialize("Zombies", 12, false, false)
 	self.player2.set_time_left(60)
 	$VBoxContainer/TopHUD/Player2.text = self.player2.get_ign()
 	$VBoxContainer/TopHUD/Player2Timer.text = self.player2.format_time()
@@ -90,6 +90,7 @@ func _play(restart = false):
 	self.retry_button.text = "Play again"
 	$Menu/VBoxContainer/WinnerText.text = winnertext
 	
+	self.gui.set_appearence_only(true)
 	self._fade_in_music()
 	self._menu_animation()
 
@@ -102,7 +103,6 @@ func _fade_out_music():
 		$Menu_theme.volume_db = DEFAULT_VOLUME
 
 func _fade_in_music():
-	print("ss")
 	if not $Menu_theme.playing:
 		$Menu_theme.volume_db = -80
 		$Menu_theme.play()
