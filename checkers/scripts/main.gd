@@ -2,16 +2,17 @@ extends Control
 
 signal game_finished
 
-@onready var gui = $VBoxContainer/Board/Grid
-@onready var player1 = $Player1
-@onready var player2 = $Player2
-@onready var menu_scene = $Menu
+const DEFAULT_VOLUME = -10
 
 var logic: GameLogic
 var retry_button
 var quit_button
 var tween
-const DEFAULT_VOLUME = -10
+
+@onready var gui = $VBoxContainer/Board/Grid
+@onready var player1 = $Player1
+@onready var player2 = $Player2
+@onready var menu_scene = $Menu
 
 
 func _ready():

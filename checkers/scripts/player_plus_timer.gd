@@ -4,9 +4,10 @@
 extends Player
 class_name PlayerPlusTimer
 
-var _time_left: float
 signal update_label
 signal time_finished
+
+var _time_left: float
 
 
 func connect_to_target(receiver):
