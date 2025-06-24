@@ -22,7 +22,10 @@ func _ready():
 
 	retry_button.connect("pressed", Callable(self, "_on_play_again_pressed"))
 	quit_button.connect("pressed", Callable(self, "_on_quit_pressed"))
-
+	
+	$MultiPlayer.set_host(true)
+	$MultiPlayer.connection()
+	
 	_game_setup()
 
 

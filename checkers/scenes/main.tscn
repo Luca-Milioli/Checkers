@@ -1,6 +1,6 @@
-[gd_scene load_steps=13 format=3 uid="uid://durfvn0w6iv78"]
+[gd_scene load_steps=14 format=3 uid="uid://durfvn0w6iv78"]
 
-[ext_resource type="Script" uid="uid://bnpr32q7ct2m1" path="res://scripts/main.gd" id="1_pptng"]
+[ext_resource type="Script" path="res://scripts/main.gd" id="1_pptng"]
 [ext_resource type="PackedScene" uid="uid://bmwwouhjteyui" path="res://scenes/board.tscn" id="1_qq4w8"]
 [ext_resource type="FontFile" uid="uid://fmy6dk7ybvpd" path="res://art/fonts/xolonium/xolonium-fonts-4.1/ttf/Xolonium-Bold.ttf" id="2_ly7go"]
 [ext_resource type="PackedScene" uid="uid://b53hwusjwh0mi" path="res://scenes/player.tscn" id="4_tsokc"]
@@ -8,6 +8,7 @@
 [ext_resource type="AudioStream" uid="uid://jjuvq1l1eked" path="res://art/sounds/win.mp3" id="6_ohxhk"]
 [ext_resource type="AudioStream" uid="uid://dc3xpf4to1yem" path="res://art/sounds/draw.mp3" id="7_5r4uu"]
 [ext_resource type="AudioStream" uid="uid://xewxamx0r5uq" path="res://art/sounds/Overworld Lofi.mp3" id="8_ubc4i"]
+[ext_resource type="PackedScene" uid="uid://4iophn1yvlj3" path="res://scenes/multiplayer.tscn" id="9_dby6b"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_hrhvo"]
 font = ExtResource("2_ly7go")
@@ -120,6 +121,8 @@ volume_db = -6.0
 [node name="MenuTheme" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("8_ubc4i")
 volume_db = -10.0
+
+[node name="MultiPlayer" parent="." instance=ExtResource("9_dby6b")]
 
 [connection signal="update_label" from="Player1" to="." method="_on_player_1_update_label"]
 [connection signal="update_label" from="Player2" to="." method="_on_player_2_update_label"]
