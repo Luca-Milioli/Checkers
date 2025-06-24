@@ -1,5 +1,6 @@
 ea4bc82a6ad023ab7ee23ee620429895
-::res://::1750662869
+::res://::1750748695
+export_presets.cfg::TextFile::-1::1750691865::0::1::::<><><>0<>0<><>::
 icon.svg::CompressedTexture2D/CompressedTexture2D::1174157267102430324::1750230570::1750230618::1::::<><><>0<>0<>793d05955ef25e5bd4b2b892e54ba408<>res://.godot/imported/icon.svg-218a8f2b3041327d8a5756f3a245f83b.ctex::
 ::res://art/::1750680345
 black_king.png::CompressedTexture2D/CompressedTexture2D::3157121081962487468::1750680294::1750680295::1::::<><><>0<>0<>db7ee80a49109646cd686ff1d093c470<>res://.godot/imported/black_king.png-04bcc9047cdff668ffcb460198ede55d.ctex::
@@ -8,13 +9,13 @@ white_king.png::CompressedTexture2D/CompressedTexture2D::2394651943780831474::17
 white_man.png::CompressedTexture2D/CompressedTexture2D::1068294417157116738::1750680298::1750680298::1::::<><><>0<>0<>e475577d816a0467eaf4b0eeb632f9e5<>res://.godot/imported/white_man.png-4eabf4eb67b3361758f1ed0c78981c05.ctex::
 ::res://art/fonts/::1750680345
 overview.PNG::CompressedTexture2D/CompressedTexture2D::521260007992839795::1750680296::1750680296::1::::<><><>0<>0<>9cc86e3986b351677f6f30f36bed5643<>res://.godot/imported/overview.PNG-5b1f715ea01c4bc1d0e4564e5f572f54.ctex::
-::res://art/fonts/architect-s-daughter/::1750686146
+::res://art/fonts/architect-s-daughter/::1750686167
 Architects Daughter SIL OFL Font License.txt::TextFile/TextFile::-1::1750680295::0::1::::<><><>0<>0<><>::
 ArchitectsDaughter32.tres::FontFile/FontFile::-1::1750680295::0::1::::<><><>0<>0<><>::res://fonts/architect-s-daughter/ArchitectsDaughter.ttf
 ArchitectsDaughter.ttf::FontFile/FontFile::6536722071314869393::1750680295::1750686167::1::::<><><>0<>0<>d7280209fef8e4994e00029847a4e992<>res://.godot/imported/ArchitectsDaughter.ttf-96d6efe1acbb575f2ba66bdc53c84cf6.fontdata::
 ::res://art/fonts/cmu-typewriter/::1750680345
 Typewriter.tres::FontFile/FontFile::-1::1750680295::0::1::::<><><>0<>0<><>::res://fonts/cmu-typewriter/Typewriter/cmuntt.ttf
-::res://art/fonts/cmu-typewriter/Typewriter/::1750686146
+::res://art/fonts/cmu-typewriter/Typewriter/::1750686167
 cmunit.ttf::FontFile/FontFile::1369298256736480793::1750680295::1750686167::1::::<><><>0<>0<>f316866b87b9c477b457e0c93d93efaf<>res://.godot/imported/cmunit.ttf-32b106af3ab084a182c460025f3112f1.fontdata::
 cmuntb.ttf::FontFile/FontFile::8185859901102643957::1750680295::1750686167::1::::<><><>0<>0<>51f994c1d73ba7482ddb228817751229<>res://.godot/imported/cmuntb.ttf-79759b33cbb5b9c7ed8ab3b277798598.fontdata::
 cmuntt.ttf::FontFile/FontFile::1602339232105332730::1750680295::1750686167::1::::<><><>0<>0<>693455cbfe144fb4ab2281eb50e083dc<>res://.godot/imported/cmuntt.ttf-e3209e159effa938d6a6c775835871f9.fontdata::
@@ -22,20 +23,20 @@ cmuntx.ttf::FontFile/FontFile::3328541169611446026::1750680295::1750686167::1:::
 OFL-FAQ.txt::TextFile/TextFile::-1::1750680295::0::1::::<><><>0<>0<><>::
 OFL.txt::TextFile/TextFile::-1::1750680295::0::1::::<><><>0<>0<><>::
 README.txt::TextFile/TextFile::-1::1750680295::0::1::::<><><>0<>0<><>::
-::res://art/fonts/connection/::1750686146
+::res://art/fonts/connection/::1750686167
 Connection.otf::FontFile/FontFile::772062706796502693::1750680295::1750686167::1::::<><><>0<>0<>94a394aaf2d5c92f9710d9bfb57b774e<>res://.godot/imported/Connection.otf-e5319b0b271f2554a38fa62fd9ea9b99.fontdata::
 ConnectionBold.otf::FontFile/FontFile::2438909619776704543::1750680295::1750686167::1::::<><><>0<>0<>b84b6f26e7f853e5135645d0813b9fd6<>res://.godot/imported/ConnectionBold.otf-c8b7fd15294f9b062610251da9369f3c.fontdata::
 SIL Open Font License.txt::TextFile/TextFile::-1::1750680295::0::1::::<><><>0<>0<><>::
-::res://art/fonts/connection_ii/::1750686146
+::res://art/fonts/connection_ii/::1750686167
 ConnectionII.otf::FontFile/FontFile::8424279869107556268::1750680295::1750686167::1::::<><><>0<>0<>dfe73a753140639416ece31c636b47d0<>res://.godot/imported/ConnectionII.otf-c0216b24f1a6cc478a25d41e545e1a87.fontdata::
 ConnectionII.tres::FontFile/FontFile::-1::1750680295::0::1::::<><><>0<>0<><>::res://fonts/connection_ii/ConnectionII.otf
 SIL Open Font License.txt::TextFile/TextFile::-1::1750680295::0::1::::<><><>0<>0<><>::
-::res://art/fonts/droid-sans/::1750686146
+::res://art/fonts/droid-sans/::1750686167
 Apache License.txt::TextFile/TextFile::-1::1750680295::0::1::::<><><>0<>0<><>::
 DroidSans-Bold.ttf::FontFile/FontFile::4262328666543911105::1750680295::1750686167::1::::<><><>0<>0<>3610ec7883dc1d685b1a4533d8c4f88e<>res://.godot/imported/DroidSans-Bold.ttf-4df0eae61c1d17d6f6cf1c77e23c4c04.fontdata::
 DroidSans.tres::FontFile/FontFile::-1::1750680295::0::1::::<><><>0<>0<><>::res://fonts/droid-sans/DroidSans.ttf
 DroidSans.ttf::FontFile/FontFile::7099541453088727443::1750680295::1750686167::1::::<><><>0<>0<>45982d0628b2fa7b88291e8bb93e1ccc<>res://.godot/imported/DroidSans.ttf-3afb8eb9188268beb23f6705402f36e8.fontdata::
-::res://art/fonts/kirifont/::1750686146
+::res://art/fonts/kirifont/::1750686167
 KiriFont.otf::FontFile/FontFile::1488052776172305389::1750680295::1750686167::1::::<><><>0<>0<>850e78266c2d1f549530c5707cb8a216<>res://.godot/imported/KiriFont.otf-2c3c0bf9359bc1e954341d480b066bd9.fontdata::
 Kirifont.tres::FontFile/FontFile::3911144484221279878::1750680295::0::1::::<><><>0<>0<><>::
 KiriFont.ttf::FontFile/FontFile::4365403211700893094::1750680295::1750686167::1::::<><><>0<>0<>690a994d7c5781c7eea5487f82d21b74<>res://.godot/imported/KiriFont.ttf-6ec80c312d4191c50f37e46758622552.fontdata::
@@ -43,7 +44,7 @@ OFL.txt::TextFile/TextFile::-1::1750680295::0::1::::<><><>0<>0<><>::
 ::res://art/fonts/linux-libertine/::1750680345
 LinuxLibertine.tres::FontFile/FontFile::-1::1750680296::0::1::::<><><>0<>0<><>::
 ::res://art/fonts/linux-libertine/LinLibertine_5.3.0_2012_07_02/::1750317732
-::res://art/fonts/linux-libertine/LinLibertine_5.3.0_2012_07_02/LinLibertineOTF_5.3.0_2012_07_02/::1750686146
+::res://art/fonts/linux-libertine/LinLibertine_5.3.0_2012_07_02/LinLibertineOTF_5.3.0_2012_07_02/::1750686167
 Bugs.txt::TextFile/TextFile::-1::1750680295::0::1::::<><><>0<>0<><>::
 ChangeLog.txt::TextFile/TextFile::-1::1750680295::0::1::::<><><>0<>0<><>::
 GPL.txt::TextFile/TextFile::-1::1750680295::0::1::::<><><>0<>0<><>::
@@ -61,12 +62,12 @@ LinLibertine_RZI.otf::FontFile/FontFile::4296464422651418883::1750680296::175068
 OFL-1.1.txt::TextFile/TextFile::-1::1750680296::0::1::::<><><>0<>0<><>::
 Readme-TEX.txt::TextFile/TextFile::-1::1750680296::0::1::::<><><>0<>0<><>::
 ToDo.txt::TextFile/TextFile::-1::1750680296::0::1::::<><><>0<>0<><>::
-::res://art/fonts/montreal/::1750686146
+::res://art/fonts/montreal/::1750686167
 Montreal-Bold.ttf::FontFile/FontFile::5691301489788745371::1750680296::1750686167::1::::<><><>0<>0<>7d2a7aaea428e1249a9405f6ae08eee6<>res://.godot/imported/Montreal-Bold.ttf-ba2c002478ff766d9989ab54a037829f.fontdata::
 Montreal-Regular.ttf::FontFile/FontFile::3962360970263999219::1750680296::1750686167::1::::<><><>0<>0<>867361f104555e8090129e07636988ec<>res://.godot/imported/Montreal-Regular.ttf-5fd70713dd9a24f71f7cdb093914d4e4.fontdata::
 Montreal.tres::FontFile/FontFile::-1::1750680296::0::1::::<><><>0<>0<><>::res://fonts/montreal/Montreal-Regular.ttf
 OFL.txt::TextFile/TextFile::-1::1750680296::0::1::::<><><>0<>0<><>::
-::res://art/fonts/poco/::1750686146
+::res://art/fonts/poco/::1750686167
 CC BY 4.0.txt::TextFile/TextFile::-1::1750680296::0::1::::<><><>0<>0<><>::
 Poco.tres::FontFile/FontFile::-1::1750680296::0::1::::<><><>0<>0<><>::res://fonts/poco/Poco.ttf
 Poco.ttf::FontFile/FontFile::2132812591379478676::1750680296::1750686167::1::::<><><>0<>0<>3ef206cf29e9507812f7ed9dcc56c294<>res://.godot/imported/Poco.ttf-fdc867f71c23f77254f3d37adaa0678b.fontdata::
@@ -74,7 +75,7 @@ Poco.ttf::FontFile/FontFile::2132812591379478676::1750680296::1750686167::1::::<
 SourceCodePro.tres::FontFile/FontFile::-1::1750680296::0::1::::<><><>0<>0<><>::res://fonts/source-code-pro/source-code-pro-2.010R-ro-1.030R-it/TTF/SourceCodePro-Regular.ttf
 ::res://art/fonts/source-code-pro/source-code-pro-2.010R-ro-1.030R-it/::1750680346
 LICENSE.txt::TextFile/TextFile::-1::1750680296::0::1::::<><><>0<>0<><>::
-::res://art/fonts/source-code-pro/source-code-pro-2.010R-ro-1.030R-it/TTF/::1750686147
+::res://art/fonts/source-code-pro/source-code-pro-2.010R-ro-1.030R-it/TTF/::1750686167
 SourceCodePro-Black.ttf::FontFile/FontFile::8036877622644982959::1750680296::1750686167::1::::<><><>0<>0<>ba84fdf3c1124ef0b3c761c083257feb<>res://.godot/imported/SourceCodePro-Black.ttf-7983afb5d99cb4bb1e685b2a3bca4c68.fontdata::
 SourceCodePro-BlackIt.ttf::FontFile/FontFile::1437923720592230716::1750680296::1750686167::1::::<><><>0<>0<>6c12b14d2e1e516e4847fdf2601a8de4<>res://.godot/imported/SourceCodePro-BlackIt.ttf-69ff2745df6ef6aeddb9e50649eeebcc.fontdata::
 SourceCodePro-Bold.ttf::FontFile/FontFile::7234007101578287087::1750680296::1750686167::1::::<><><>0<>0<>397561a375c2ae3e78bf74d1734c97db<>res://.godot/imported/SourceCodePro-Bold.ttf-d35c04337653efd3d481005794ddad6d.fontdata::
@@ -94,31 +95,31 @@ Xolonium.tres::FontFile/FontFile::-1::1750680297::0::1::::<><><>0<>0<><>::res://
 ::res://art/fonts/xolonium/xolonium-fonts-4.1/::1750680346
 FONTLOG.txt::TextFile/TextFile::-1::1750680297::0::1::::<><><>0<>0<><>::
 LICENSE.txt::TextFile/TextFile::-1::1750680297::0::1::::<><><>0<>0<><>::
-::res://art/fonts/xolonium/xolonium-fonts-4.1/ttf/::1750686147
+::res://art/fonts/xolonium/xolonium-fonts-4.1/ttf/::1750686167
 Xolonium-Bold.ttf::FontFile/FontFile::377229493180490461::1750680297::1750686167::1::::<><><>0<>0<>2d9b227e427d1c88fa77d65ad84297a5<>res://.godot/imported/Xolonium-Bold.ttf-3953f6b25f1ab2ef47a498cad583b79f.fontdata::
 Xolonium-Regular.ttf::FontFile/FontFile::2881813122953020851::1750680297::1750686167::1::::<><><>0<>0<>01acfc77c7a27027c30bd6ab76a8077a<>res://.godot/imported/Xolonium-Regular.ttf-72a76f12ee34b269414e306fb4687bbf.fontdata::
 ::res://art/sounds/::1750680480
-capture.mp3::AudioStreamMP3::1519559534626297912::1750680297::1750680480::1::::<><><>0<>0<>936a1a8c50bdfeac2223a203114c0641<>res://.godot/imported/capture.mp3-8a55e3db40248e47ccfbd0f1bc7a4b86.mp3str::
-draw.mp3::AudioStreamMP3::7358865901510354116::1750680297::1750680480::1::::<><><>0<>0<>f4ee81dde8eaa96bf17f30f2834ea7f5<>res://.godot/imported/draw.mp3-35c3ab9fd33aeba41541b7a8e9f4fe35.mp3str::
-move-self.mp3::AudioStreamMP3::357676437459929489::1750680297::1750680480::1::::<><><>0<>0<>9dd53920fca8daacf13f0d9b76eefd57<>res://.godot/imported/move-self.mp3-55afcb846b6ccb615f8737a07bcf2c86.mp3str::
-Overworld Lofi.mp3::AudioStreamMP3::1623977781408438440::1750680297::1750680480::1::::<><><>0<>0<>7e6ac2b229876a629a1da2c14ef89f51<>res://.godot/imported/Overworld Lofi.mp3-3aac5c19d14653079d4fcd08f7f80473.mp3str::
-promotion.mp3::AudioStreamMP3::7738043673118182304::1750680297::1750680480::1::::<><><>0<>0<>4056c541fea43c28f27e4e437cbc9ae4<>res://.godot/imported/promotion.mp3-455a7391f5bf1eafcf56d672a43aad59.mp3str::
-win.mp3::AudioStreamMP3::651531715129381971::1750680297::1750680480::1::::<><><>0<>0<>600a79cf9eeabc4859ad573f58042702<>res://.godot/imported/win.mp3-65bf058503108a6a0431e1d9776548f9.mp3str::
-::res://scenes/::1750686147
-board.tscn::PackedScene::3275464954609464128::1750686147::0::1::::<><><>0<>0<><>::uid://5ljake3plkxh::::res://scripts/grid.gd<>uid://fdi440fnkgo4::::res://art/sounds/move-self.mp3<>uid://vwc6nuhr8nee::::res://art/sounds/capture.mp3<>uid://diimpi03a7ing::::res://art/sounds/promotion.mp3
-king.tscn::PackedScene::6445554702638466638::1750680298::0::1::::<><><>0<>0<><>::uid://c46rrdh5nbl8c::::res://scripts/king.gd
-main.tscn::PackedScene::8598475154759810021::1750686147::0::1::::<><><>0<>0<><>::uid://bnpr32q7ct2m1::::res://scripts/main.gd<>uid://bmwwouhjteyui::::res://scenes/board.tscn<>uid://fmy6dk7ybvpd::::res://art/fonts/xolonium/xolonium-fonts-4.1/ttf/Xolonium-Bold.ttf<>uid://b53hwusjwh0mi::::res://scenes/player.tscn<>uid://b0s7k1ehk1a12::::res://scenes/winner.tscn<>uid://jjuvq1l1eked::::res://art/sounds/win.mp3<>uid://dc3xpf4to1yem::::res://art/sounds/draw.mp3<>uid://xewxamx0r5uq::::res://art/sounds/Overworld Lofi.mp3
+capture.mp3::AudioStreamMP3/AudioStreamMP3::1519559534626297912::1750680297::1750680480::1::::<><><>0<>0<>936a1a8c50bdfeac2223a203114c0641<>res://.godot/imported/capture.mp3-8a55e3db40248e47ccfbd0f1bc7a4b86.mp3str::
+draw.mp3::AudioStreamMP3/AudioStreamMP3::7358865901510354116::1750680297::1750680480::1::::<><><>0<>0<>f4ee81dde8eaa96bf17f30f2834ea7f5<>res://.godot/imported/draw.mp3-35c3ab9fd33aeba41541b7a8e9f4fe35.mp3str::
+move-self.mp3::AudioStreamMP3/AudioStreamMP3::357676437459929489::1750680297::1750680480::1::::<><><>0<>0<>9dd53920fca8daacf13f0d9b76eefd57<>res://.godot/imported/move-self.mp3-55afcb846b6ccb615f8737a07bcf2c86.mp3str::
+Overworld Lofi.mp3::AudioStreamMP3/AudioStreamMP3::1623977781408438440::1750680297::1750680480::1::::<><><>0<>0<>7e6ac2b229876a629a1da2c14ef89f51<>res://.godot/imported/Overworld Lofi.mp3-3aac5c19d14653079d4fcd08f7f80473.mp3str::
+promotion.mp3::AudioStreamMP3/AudioStreamMP3::7738043673118182304::1750680297::1750680480::1::::<><><>0<>0<>4056c541fea43c28f27e4e437cbc9ae4<>res://.godot/imported/promotion.mp3-455a7391f5bf1eafcf56d672a43aad59.mp3str::
+win.mp3::AudioStreamMP3/AudioStreamMP3::651531715129381971::1750680297::1750680480::1::::<><><>0<>0<>600a79cf9eeabc4859ad573f58042702<>res://.godot/imported/win.mp3-65bf058503108a6a0431e1d9776548f9.mp3str::
+::res://scenes/::1750693941
+board.tscn::PackedScene::3275464954609464128::1750693941::0::1::::<><><>0<>0<><>::uid://5ljake3plkxh::::res://scripts/grid.gd<>uid://fdi440fnkgo4::::res://art/sounds/move-self.mp3<>uid://vwc6nuhr8nee::::res://art/sounds/capture.mp3<>uid://diimpi03a7ing::::res://art/sounds/promotion.mp3
+king.tscn::PackedScene::6445554702638466638::1750680298::0::1::::<><><>0<>0<><>::res://scripts/king.gd
+main.tscn::PackedScene::8598475154759810021::1750693941::0::1::::<><><>0<>0<><>::uid://bnpr32q7ct2m1::::res://scripts/main.gd<>uid://bmwwouhjteyui::::res://scenes/board.tscn<>uid://fmy6dk7ybvpd::::res://art/fonts/xolonium/xolonium-fonts-4.1/ttf/Xolonium-Bold.ttf<>uid://b53hwusjwh0mi::::res://scenes/player.tscn<>uid://b0s7k1ehk1a12::::res://scenes/winner.tscn<>uid://jjuvq1l1eked::::res://art/sounds/win.mp3<>uid://dc3xpf4to1yem::::res://art/sounds/draw.mp3<>uid://xewxamx0r5uq::::res://art/sounds/Overworld Lofi.mp3
 man.tscn::PackedScene::897788884100005617::1750680298::0::1::::<><><>0<>0<><>::res://scripts/man_container.gd<>res://scripts/man.gd
 player.tscn::PackedScene::4550353955075124284::1750680298::0::1::::<><><>0<>0<><>::res://scripts/player_plus_timer.gd
-tile.tscn::PackedScene::1322603014540268544::1750686147::0::1::::<><><>0<>0<><>::uid://kflhkdhrc4e8::::res://scripts/tile.gd
+tile.tscn::PackedScene::1322603014540268544::1750693941::0::1::::<><><>0<>0<><>::uid://kflhkdhrc4e8::::res://scripts/tile.gd
 winner.tscn::PackedScene::4180262748043317983::1750680298::0::1::::<><><>0<>0<><>::uid://fmy6dk7ybvpd::::res://art/fonts/xolonium/xolonium-fonts-4.1/ttf/Xolonium-Bold.ttf
-::res://scripts/::1750686147
-game_logic.gd::GDScript::1134356652145920979::1750686147::0::1::::GameLogic<>RefCounted<><>0<>0<><>::
-grid.gd::GDScript::2128920450075927941::1750680823::0::1::::Board<>GridContainer<><>0<>0<><>::
-king.gd::GDScript::6873376260402577000::1750686147::0::1::::King<>Man<><>0<>0<><>::
-main.gd::GDScript::3330924952709494870::1750686147::0::1::::<>Control<><>0<>0<><>::
-man.gd::GDScript::557589372145285735::1750686147::0::1::::Man<>TextureRect<><>0<>0<><>::
-man_container.gd::GDScript::2336192497443005763::1750681546::0::1::::<>Control<><>0<>0<><>::
-player.gd::GDScript/GDScript::475530773921588094::1750408249::0::1::::Player<>Node<><>0<>0<><>::
-player_plus_timer.gd::GDScript::6458201435635743518::1750666445::0::1::::PlayerPlusTimer<>Player<><>0<>0<><>::
-tile.gd::GDScript::712891242837180765::1750680298::0::1::::<>ColorRect<><>0<>0<><>::
+::res://scripts/::1750693940
+game_logic.gd::GDScript::1134356652145920979::1750693876::0::1::::GameLogic<>RefCounted<><>0<>0<><>::
+grid.gd::GDScript::2128920450075927941::1750693876::0::1::::Board<>GridContainer<><>0<>0<><>::
+king.gd::GDScript::6873376260402577000::1750690459::0::1::::King<>Man<><>0<>0<><>::
+main.gd::GDScript::3330924952709494870::1750693627::0::1::::<>Control<><>0<>0<><>::
+man.gd::GDScript::557589372145285735::1750693940::0::1::::Man<>TextureRect<><>0<>0<><>::
+man_container.gd::GDScript::2336192497443005763::1750690459::0::1::::<>Control<><>0<>0<><>::
+player.gd::GDScript::475530773921588094::1750690459::0::1::::Player<>Node<><>0<>0<><>::
+player_plus_timer.gd::GDScript::6458201435635743518::1750691520::0::1::::PlayerPlusTimer<>Player<><>0<>0<><>::
+tile.gd::GDScript::712891242837180765::1750690459::0::1::::<>ColorRect<><>0<>0<><>::

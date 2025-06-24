@@ -4,6 +4,7 @@ class_name Man
 
 enum { WHITE_MAN, WHITE_KING, NO_MAN, BLACK_MAN, BLACK_KING }
 
+const SIZE = 8
 const DEFAULT_MODULATE = Color(1, 1, 1, 1)
 const CLICK_MODULATE = Color(0.4, 1, 0.8, 1)
 
@@ -137,7 +138,7 @@ func available_captures(board) -> Array:
 
 
 func _check_move(move, board) -> bool:
-	if move.x < 0 or move.x >= 8 or move.y < 0 or move.y >= 8:  #out of board
+	if move.x < 0 or move.x >= SIZE or move.y < 0 or move.y >= SIZE:  #out of board
 		return false
 	var cell = board[move.x][move.y]
 	if cell != NO_MAN:  # can't go on non-empty cell

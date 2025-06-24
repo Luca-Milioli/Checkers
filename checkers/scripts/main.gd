@@ -16,9 +16,9 @@ var tween
 
 
 func _ready():
-	$Menu_theme.volume_db = DEFAULT_VOLUME
-	self.retry_button = get_node("Menu/VBoxContainer/HboxContainer/PlayAgain")
-	self.quit_button = get_node("Menu/VBoxContainer/HboxContainer/Quit")
+	$MenuTheme.volume_db = DEFAULT_VOLUME
+	self.retry_button = $Menu/VBoxContainer/HboxContainer/PlayAgain
+	self.quit_button = $Menu/VBoxContainer/HboxContainer/Quit
 
 	retry_button.connect("pressed", Callable(self, "_on_play_again_pressed"))
 	quit_button.connect("pressed", Callable(self, "_on_quit_pressed"))
@@ -103,20 +103,20 @@ func _play(restart = false):
 
 
 func _fade_out_music():
-	if $Menu_theme.playing:
+	if $MenuTheme.playing:
 		var t = create_tween()
-		t.tween_property($Menu_theme, "volume_db", -80, 8)
+		t.tween_property($MenuTheme, "volume_db", -80, 8)
 		await t.finished
-		$Menu_theme.stop()
-		$Menu_theme.volume_db = DEFAULT_VOLUME
+		$MenuTheme.stop()
+		$MenuTheme.volume_db = DEFAULT_VOLUME
 
 
 func _fade_in_music():
-	if not $Menu_theme.playing:
-		$Menu_theme.volume_db = -80
-		$Menu_theme.play()
+	if not $MenuTheme.playing:
+		$MenuTheme.volume_db = -80
+		$MenuTheme.play()
 		var t = create_tween()
-		t.tween_property($Menu_theme, "volume_db", DEFAULT_VOLUME, 0.5)
+		t.tween_property($MenuTheme, "volume_db", DEFAULT_VOLUME, 0.5)
 
 
 func _on_player_1_update_label() -> void:

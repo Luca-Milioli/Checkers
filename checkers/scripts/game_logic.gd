@@ -153,10 +153,10 @@ func _make_move():
 			multi_move = not self.available_captures.is_empty()
 			if multi_move:
 				var captures = _single_man_available_captures(new_cell.x, new_cell.y)
+				self.available_captures.clear()
 				if not captures.is_empty():
 					self.available_captures[_make_key(new_cell.x, new_cell.y)] = captures
-				else:
-					self.available_captures.clear()
+					self.new_moves.emit(self.available_captures)
 				multi_move = not self.available_captures.is_empty()
 	return move_made
 

@@ -117,7 +117,7 @@ volume_db = -12.0
 stream = ExtResource("7_5r4uu")
 volume_db = -6.0
 
-[node name="Menu_theme" type="AudioStreamPlayer" parent="."]
+[node name="MenuTheme" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("8_ubc4i")
 volume_db = -10.0
 
