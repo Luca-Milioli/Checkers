@@ -25,7 +25,10 @@ var available_captures = {}
 var game_finished: Signal
 var past_board = []
 var move_count_rule = 0
+var multi
 
+func set_multiplayer(multi):
+	self.multi = multi
 
 func set_players(player1: Player, player2: Player):
 	self.player1 = player1
@@ -222,12 +225,10 @@ func get_board():
 func set_grid(grid):
 	self.grid = grid
 
-
 func _on_move_selected(old, new):
 	self.old_cell = old
 	self.new_cell = new
 	self.move_ready.emit()
-
 
 func _single_man_available_captures(x, y):
 	return self.grid.get_cell(x, y).get_child(0).get_child(0).available_captures(self.board)

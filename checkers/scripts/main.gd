@@ -8,28 +8,35 @@ var logic: GameLogic
 var retry_button
 var quit_button
 var tween
+var players_ready : Dictionary
+var is_ready
 
 @onready var gui = $VBoxContainer/Board/Grid
 @onready var player1 = $Player1
 @onready var player2 = $Player2
 @onready var menu_scene = $Menu
+@onready var my_multiplayer = $MultiPlayer
 
 
 func _ready():
+	self.is_ready = false
+	
 	$MenuTheme.volume_db = DEFAULT_VOLUME
 	self.retry_button = $Menu/VBoxContainer/HboxContainer/PlayAgain
 	self.quit_button = $Menu/VBoxContainer/HboxContainer/Quit
 
-	retry_button.connect("pressed", Callable(self, "_on_play_again_pressed"))
+	my_multiplayer.connection()
+	
+	
 	quit_button.connect("pressed", Callable(self, "_on_quit_pressed"))
+	my_multiplayer.all_peers_connected.connect(func(): 
+		retry_button.connect("pressed", Callable(self, "_on_play_again_pressed"))
+		_game_setup()
+	)
 	
-	$MultiPlayer.set_host(true)
-	$MultiPlayer.connection()
-	
-	_game_setup()
-
 
 func _game_setup():
+	print("alllber")
 	self.player1.inizialize("Plants", 12, true, false)
 	self.player1.set_time_left(60)
 	$VBoxContainer/BotHUD/Player1.text = self.player1.get_ign()
@@ -41,6 +48,7 @@ func _game_setup():
 	$VBoxContainer/TopHUD/Player2Timer.text = self.player2.format_time()
 
 	self.logic = GameLogic.new()
+	self.logic.set_multiplayer(self.my_multiplayer)
 	self.logic.set_players(player1, player2)
 	self.player1.connect_to_target(self.logic)
 	self.player2.connect_to_target(self.logic)
@@ -97,7 +105,7 @@ func _play(restart = false):
 
 	self.quit_button.disabled = false
 	self.retry_button.disabled = false
-	self.retry_button.text = "Play again"
+	
 	$Menu/VBoxContainer/WinnerText.text = winnertext
 
 	self.gui.set_appearence_only(true)
@@ -129,11 +137,20 @@ func _on_player_1_update_label() -> void:
 func _on_player_2_update_label() -> void:
 	$VBoxContainer/TopHUD/Player2Timer.text = self.player2.format_time()
 
-
 func _on_play_again_pressed() -> void:
+	
+	self.is_ready = true
+	
 	self.retry_button.disabled = true
 	self.quit_button.disabled = true
-
+	
+	# Notifica gli altri peer che questo giocatore è pronto
+	var my_id = my_multiplayer.multiplayer.get_unique_id()
+	_set_player_ready.rpc(my_id)
+	_set_player_ready(my_id)  # Imposta anche localmente
+	
+	#_update_button_text()
+	
 	if retry_button.text == "Play again":
 		var board_path = $VBoxContainer/Board.scene_file_path
 		$VBoxContainer/Board.queue_free()
@@ -148,9 +165,29 @@ func _on_play_again_pressed() -> void:
 		self.gui = $VBoxContainer.get_node("Board/Grid")
 
 		self._game_setup()
+	
+	self.retry_button.text = "Waiting for client"
+			
+	
 
-	self._play()
+# Funzione RPC per sincronizzare lo stato "ready" tra i peer
+@rpc("any_peer", "reliable")
+func _set_player_ready(peer_id: int) -> void:
+	self.players_ready[peer_id] = true
+	print("Giocatore %d è pronto. Giocatori pronti: %s" % [peer_id, str(players_ready)])
+	
+	_check_all_ready()
 
+func _check_all_ready() -> void:
+	var connected_peers = my_multiplayer.multiplayer.get_peers()
+	var my_id = my_multiplayer.multiplayer.get_unique_id()
+	var total_players = connected_peers.size() + 1  # +1 per il giocatore locale
+	
+	print("Controllo ready: %d/%d giocatori pronti" % [players_ready.size(), total_players])
+	
+	if players_ready.size() >= total_players:
+		# Tutti i giocatori sono pronti, inizia il gioco
+		self._play()
 
 func _on_quit_pressed() -> void:
 	get_tree().quit()

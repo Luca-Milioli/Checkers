@@ -4,3 +4,9 @@
 
 [node name="Multiplayer" type="Node"]
 script = ExtResource("1_m3yos")
+
+[node name="Connecting" type="Timer" parent="."]
+wait_time = 5.0
+one_shot = true
+
+[connection signal="timeout" from="Connecting" to="." method="_on_connecting_timeout"]

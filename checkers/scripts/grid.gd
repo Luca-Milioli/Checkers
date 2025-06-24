@@ -105,17 +105,34 @@ func _on_piece_clicked(piece):
 			self.man_reference.select()
 			_show_moves_hint()
 
-
-func _on_tile_clicked(tile):
-	if not self.man_reference:
-		return
-
-	var tile_coord = tile.get_coordinates()
+@rpc("any_peer")
+func _on_tile_clicked(tile, man_coords_from_remote = null):
+	
+	var tile_coord
+	var debug : String
+	
+	# remote call
+	if tile is Vector2i and man_coords_from_remote != null:
+		tile_coord = tile
+		self.man_reference = get_cell(man_coords_from_remote.x, man_coords_from_remote.y).get_child(0).get_child(0)
+		debug = "remote"
+	# local call
+	else:
+		# local call but no man selected
+		if not self.man_reference:
+			return
+		tile_coord = tile.get_coordinates()
+		debug = "local"
+	
 	var man_coord = self.man_reference.get_coordinates()
-
+	print("Call from "+debug, " | man_coord: "+str(man_coord)+ " | tile_coord: "+str(tile))
+	
 	if tile_coord != man_coord:
 		if self.man_reference.is_selected():
 			self.move_selected.emit(man_coord, tile_coord)
+			if not man_coords_from_remote:
+				print(man_coord)
+				_on_tile_clicked.rpc(tile_coord, man_coord)
 
 
 func _animations(object, ending_value, param = "global_position", time = 0.2):
@@ -129,7 +146,7 @@ func _animations(object, ending_value, param = "global_position", time = 0.2):
 	await tween.finished
 
 
-func _on_piece_moved(old_cell, new_cell, done):
+func _on_piece_moved(old_cell, new_cell, done = null):
 	var old_tile = self.get_cell(old_cell.x, old_cell.y)
 	var new_tile = self.get_cell(new_cell.x, new_cell.y)
 
@@ -154,8 +171,12 @@ func _on_piece_moved(old_cell, new_cell, done):
 	moved_man.set_coordinates(new_cell.x, new_cell.y)
 	moved_man.deselect()
 	_hide_moves_hint()
-
-	done.emit()
+	
+	# done is only passed locally (not from remote)
+	# so rpc is called only if the current player made the move
+	# if piece_moved is called from remote player, rpc is not called again to avoid infinite loops
+	if done != null:
+		done.emit()
 
 
 func _on_capture(cell):
