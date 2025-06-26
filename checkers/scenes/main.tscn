@@ -50,6 +50,7 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="TopHUD" type="Control" parent="VBoxContainer"]
+visible = false
 custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
 
@@ -79,6 +80,7 @@ custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
 
 [node name="BotHUD" type="Control" parent="VBoxContainer"]
+visible = false
 custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
 
@@ -126,3 +128,5 @@ volume_db = -10.0
 
 [connection signal="update_label" from="Player1" to="." method="_on_player_1_update_label"]
 [connection signal="update_label" from="Player2" to="." method="_on_player_2_update_label"]
+[connection signal="all_peers_connected" from="MultiPlayer" to="." method="_on_multi_player_all_peers_connected"]
+[connection signal="peer_disconnected_signal" from="MultiPlayer" to="." method="_on_multi_player_peer_disconnected_signal"]

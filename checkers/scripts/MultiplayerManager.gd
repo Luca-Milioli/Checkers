@@ -24,7 +24,7 @@ func connection():
 	connection_attempted = true
 	
 	# random timer
-	$Connecting.wait_time = randi() % 10 # random timeout
+	$Connecting.wait_time = randi() % 5 # random timeout
 	print($Connecting.wait_time)
 	$Connecting.start()
 	

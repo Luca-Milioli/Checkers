@@ -4,7 +4,7 @@
 
 [sub_resource type="LabelSettings" id="LabelSettings_c53yo"]
 font = ExtResource("1_ciejl")
-font_size = 40
+font_size = 33
 font_color = Color(1, 1, 0, 1)
 
 [node name="WinnerControl" type="Control"]
@@ -45,7 +45,7 @@ alignment = 1
 
 [node name="WinnerText" type="Label" parent="VBoxContainer"]
 layout_mode = 2
-text = "CHECKERS"
+text = "CHECKERS ONLINE"
 label_settings = SubResource("LabelSettings_c53yo")
 horizontal_alignment = 1
 vertical_alignment = 1

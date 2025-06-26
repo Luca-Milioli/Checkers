@@ -1,6 +1,7 @@
 extends Control
 
 signal game_finished
+signal connection_done
 
 const DEFAULT_VOLUME = -10
 
@@ -19,26 +20,27 @@ var is_ready
 
 
 func _ready():
-	self.is_ready = false
 	
 	$MenuTheme.volume_db = DEFAULT_VOLUME
 	self.retry_button = $Menu/VBoxContainer/HboxContainer/PlayAgain
 	self.quit_button = $Menu/VBoxContainer/HboxContainer/Quit
-
-	my_multiplayer.connection()
-	
-	
+	_menu_animation()
+	self.retry_button.text = "Connect"
 	quit_button.connect("pressed", Callable(self, "_on_quit_pressed"))
+	retry_button.connect("pressed", Callable(self, "_on_play_again_pressed"))
+	
+	
+func _multi_setup():
+	my_multiplayer.connection()
 	my_multiplayer.all_peers_connected.connect(func(): 
-		retry_button.connect("pressed", Callable(self, "_on_play_again_pressed"))
 		_game_setup()
 	)
 	
-
+	
 func _game_setup():
-	print("alllber")
+	print("SETUPPO")
 	self.player1.inizialize("Plants", 12, true, false)
-	self.player1.set_time_left(60)
+	self.player1.set_time_left(7)
 	$VBoxContainer/BotHUD/Player1.text = self.player1.get_ign()
 	$VBoxContainer/BotHUD/Player1Timer.text = self.player1.format_time()
 
@@ -58,7 +60,9 @@ func _game_setup():
 	self.gui.set_appearence_only(true)
 	self.gui.connect_to_target(self.logic)
 	self.gui.setup_gui(self.logic.get_board())
-
+	
+	$VBoxContainer/TopHUD.visible = true
+	$VBoxContainer/BotHUD.visible = true
 	self._fade_in_music()
 	self._menu_animation()
 
@@ -81,6 +85,7 @@ func _play_animation():
 
 
 func _play(restart = false):
+	print("GIOCHIAMO !")
 	self.gui.set_appearence_only(false)
 
 	self._fade_out_music()
@@ -91,6 +96,9 @@ func _play(restart = false):
 	self.player1.stop_timer()
 	self.player2.stop_timer()
 	var winner = self.logic.get_winner()
+	end_game(winner)
+
+func end_game(winner):
 	var winnertext: String
 	match winner:
 		1:
@@ -109,8 +117,14 @@ func _play(restart = false):
 	$Menu/VBoxContainer/WinnerText.text = winnertext
 
 	self.gui.set_appearence_only(true)
+	self.retry_button.text = "Play again"
+	
+	for player in players_ready:
+		players_ready[player] = false
+		
 	self._fade_in_music()
 	self._menu_animation()
+	
 
 
 func _fade_out_music():
@@ -139,19 +153,19 @@ func _on_player_2_update_label() -> void:
 
 func _on_play_again_pressed() -> void:
 	
-	self.is_ready = true
 	
+	if self.retry_button.text == "Connect":
+		self.retry_button.text = "Connecting..."
+		self.retry_button.disabled = true
+		_multi_setup()
+		return
+		
 	self.retry_button.disabled = true
 	self.quit_button.disabled = true
 	
-	# Notifica gli altri peer che questo giocatore è pronto
-	var my_id = my_multiplayer.multiplayer.get_unique_id()
-	_set_player_ready.rpc(my_id)
-	_set_player_ready(my_id)  # Imposta anche localmente
-	
 	#_update_button_text()
 	
-	if retry_button.text == "Play again":
+	if self.retry_button.text == "Play again":
 		var board_path = $VBoxContainer/Board.scene_file_path
 		$VBoxContainer/Board.queue_free()
 		self.gui.queue_free()
@@ -163,11 +177,18 @@ func _on_play_again_pressed() -> void:
 		$VBoxContainer.add_child(new_board)
 		$VBoxContainer.move_child(new_board, 1)
 		self.gui = $VBoxContainer.get_node("Board/Grid")
-
+		
+		self.retry_button.text = "start game"
+		#await self._multi_setup()
 		self._game_setup()
+		#self._on_play_again_pressed()
 	
-	self.retry_button.text = "Waiting for client"
-			
+	self.retry_button.text = "Waiting for client..."
+	
+	# Notifica gli altri peer che questo giocatore è pronto
+	var my_id = my_multiplayer.multiplayer.get_unique_id()
+	_set_player_ready.rpc(my_id)
+	_set_player_ready(my_id)  # Imposta anche localmente
 	
 
 # Funzione RPC per sincronizzare lo stato "ready" tra i peer
@@ -186,8 +207,31 @@ func _check_all_ready() -> void:
 	print("Controllo ready: %d/%d giocatori pronti" % [players_ready.size(), total_players])
 	
 	if players_ready.size() >= total_players:
+		self.players_ready = {} # reset for next game
 		# Tutti i giocatori sono pronti, inizia il gioco
 		self._play()
 
 func _on_quit_pressed() -> void:
 	get_tree().quit()
+
+
+func _on_multi_player_all_peers_connected() -> void:
+	self.retry_button.text = "Start game"
+	self.retry_button.disabled = false
+
+
+func _on_multi_player_peer_disconnected_signal(id: Variant) -> void:
+	
+	var winnerid = self.my_multiplayer.multiplayer.get_unique_id()
+	var winner : int
+	if self.player1.get_peer_id() == winnerid:
+		if self.player1.is_white():
+			winner = 1
+		else:
+			winner = 2
+	else:
+		if self.player2.is_white():
+			winner = 2
+		else:
+			winner = 1
+	end_game(1)
