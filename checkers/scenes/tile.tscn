@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://s3xcwwap3x33"]
 
-[ext_resource type="Script" path="res://scripts/tile.gd" id="1_a0q3e"]
+[ext_resource type="Script" uid="uid://o2yajoaoaqnc" path="res://scripts/tile.gd" id="1_a0q3e"]
 
 [node name="Tile" type="ColorRect"]
 custom_minimum_size = Vector2(68, 68)

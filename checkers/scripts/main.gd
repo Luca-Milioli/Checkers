@@ -95,11 +95,14 @@ func _flip_gui():
 	$VBoxContainer/BoardWrapper.scale = Vector2(1, -1)
 	$VBoxContainer/BoardWrapper.position.y += $VBoxContainer/BoardWrapper.size.y
 	
-	self.gui.flip()
 	
 	var tmp = $VBoxContainer/BotHUD/Player1.text
 	$VBoxContainer/BotHUD/Player1.text = $VBoxContainer/TopHUD/Player2.text
 	$VBoxContainer/TopHUD/Player2.text = tmp
+	
+	var tmp2 = self.player1.get_time_left()
+	self.player1.set_time_left(self.player2.get_time_left())
+	self.player2.set_time_left(tmp2)
 	
 	var timer1 = self.player1.get_child(0)
 	self.player1.remove_child(timer1)
@@ -107,6 +110,11 @@ func _flip_gui():
 	self.player2.remove_child(timer2)
 	self.player1.add_child(timer2)
 	self.player2.add_child(timer1)
+	
+	_on_player_1_update_label()
+	_on_player_2_update_label()
+	
+	self.gui.flip()
 
 @rpc("authority")
 func _receive_white_assignment(is_server_white: bool):
@@ -120,7 +128,7 @@ func _setup_players():
 	$VBoxContainer/BotHUD/Player1Timer.text = self.player1.format_time()
 	
 	self.player2.inizialize("Zombies", 12, false, false)
-	self.player2.set_time_left(60)
+	self.player2.set_time_left(6)
 	$VBoxContainer/TopHUD/Player2.text = self.player2.get_ign()
 	$VBoxContainer/TopHUD/Player2Timer.text = self.player2.format_time()
 	
@@ -150,15 +158,15 @@ func end_game(winner):
 	match winner:
 		1:
 			if my_id == self.player1.get_peer_id():
-				winnertext = "you won!"
+				winnertext = "You won!"
 			else:
-				winnertext = "you lost!"
+				winnertext = "You lost!"
 			$Win.play()
 		2:
 			if my_id == self.player2.get_peer_id():
-				winnertext = "you won!"
+				winnertext = "You won!"
 			else:
-				winnertext = "you lost!"
+				winnertext = "You lost!"
 			$Win.play()
 		_:
 			winnertext = "Draw"
@@ -168,7 +176,7 @@ func end_game(winner):
 	self.retry_button.disabled = false
 	
 	$Menu/VBoxContainer/WinnerText.text = winnertext
-
+	
 	self.gui.set_appearence_only(true)
 	self.retry_button.text = "Play again"
 	
@@ -244,7 +252,6 @@ func _on_play_again_pressed() -> void:
 @rpc("any_peer", "reliable")
 func _set_player_ready(peer_id: int) -> void:
 	self.players_ready[peer_id] = true
-	print("Giocatore %d è pronto. Giocatori pronti: %s" % [peer_id, str(players_ready)])
 	
 	_check_all_ready()
 
@@ -253,7 +260,6 @@ func _check_all_ready() -> void:
 	var my_id = my_multiplayer.multiplayer.get_unique_id()
 	var total_players = connected_peers.size() + 1  # +1 per il giocatore locale
 	
-	print("Controllo ready: %d/%d giocatori pronti" % [players_ready.size(), total_players])
 	
 	if players_ready.size() >= total_players:
 		self.players_ready = {} # reset for next game

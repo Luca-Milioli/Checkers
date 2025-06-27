@@ -4,7 +4,7 @@
 
 [sub_resource type="LabelSettings" id="LabelSettings_c53yo"]
 font = ExtResource("1_ciejl")
-font_size = 33
+font_size = 32
 font_color = Color(1, 1, 0, 1)
 
 [node name="WinnerControl" type="Control"]
