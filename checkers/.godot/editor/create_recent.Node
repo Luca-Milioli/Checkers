@@ -1,9 +1,9 @@
+Control
+VBoxContainer
 Timer
 Button
 Label
-VBoxContainer
 ColorRect
-Control
 MarginContainer
 CenterContainer
 HBoxContainer

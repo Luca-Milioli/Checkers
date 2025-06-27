@@ -1,0 +1,72 @@
+[gd_scene load_steps=7 format=3 uid="uid://bda4oc4vppndf"]
+
+[ext_resource type="Shader" path="res://shaders/circle.gdshader" id="1_s1vby"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_foo3c"]
+shader = ExtResource("1_s1vby")
+shader_parameter/circle_size = 0.0
+
+[sub_resource type="Animation" id="Animation_reh2k"]
+resource_name = "fade_in"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:material:shader_parameter/circle_size")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.0, 1.0]
+}
+
+[sub_resource type="Animation" id="Animation_qrgts"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:material:shader_parameter/circle_size")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+
+[sub_resource type="Animation" id="Animation_uchjm"]
+resource_name = "fade_out"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:material:shader_parameter/circle_size")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [1.0, 0.0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_uq4x6"]
+_data = {
+"RESET": SubResource("Animation_qrgts"),
+"fade_in": SubResource("Animation_reh2k"),
+"fade_out": SubResource("Animation_uchjm")
+}
+
+[node name="TransitionCircle" type="ColorRect"]
+material = SubResource("ShaderMaterial_foo3c")
+offset_left = -4.0
+offset_top = -4.0
+offset_right = 549.0
+offset_bottom = 599.0
+color = Color(0, 0, 0, 1)
+
+[node name="Transition" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_uq4x6")
+}

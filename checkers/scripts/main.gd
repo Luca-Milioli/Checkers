@@ -12,7 +12,7 @@ var tween
 var players_ready : Dictionary
 var is_server_white: bool
 
-@onready var gui = $VBoxContainer/Board/Grid
+@onready var gui = $VBoxContainer/BoardWrapper/Board/Grid
 @onready var player1 = $Player1
 @onready var player2 = $Player2
 @onready var menu_scene = $Menu
@@ -20,10 +20,12 @@ var is_server_white: bool
 
 
 func _ready():
-	
+	$TransitionCircle/Transition.play("fade_in")
+	await $TransitionCircle/Transition.animation_finished
 	$MenuTheme.volume_db = DEFAULT_VOLUME
 	self.retry_button = $Menu/VBoxContainer/HboxContainer/PlayAgain
 	self.quit_button = $Menu/VBoxContainer/HboxContainer/Quit
+	_fade_in_music()
 	_menu_animation()
 	self.retry_button.text = "Connect"
 	quit_button.connect("pressed", Callable(self, "_on_quit_pressed"))
@@ -31,7 +33,10 @@ func _ready():
 	
 func _multi_setup():
 	self.my_multiplayer.connection()
-	self.my_multiplayer.all_peers_connected.connect(_game_setup)
+	self.my_multiplayer.all_peers_connected.connect(func():
+		_main_menu_out_animation()
+		_game_setup()
+	)
 	
 func _game_setup():
 	self.logic = GameLogic.new()
@@ -49,9 +54,14 @@ func _game_setup():
 	
 	$VBoxContainer/TopHUD.visible = true
 	$VBoxContainer/BotHUD.visible = true
-	self._fade_in_music()
+	#self._fade_in_music()
 	self._menu_animation()
 
+func _main_menu_out_animation():
+	self.tween = create_tween()
+	self.tween.tween_property($Scroller, "modulate", Color(1, 1, 1, 0), 1.5)
+	self.tween.connect("finished", func(): $Scroller.visible = false)
+	
 func _menu_animation():
 	self.menu_scene.visible = true
 	self.tween = create_tween()
@@ -78,10 +88,25 @@ func _assign_colors(is_server_white: bool):
 		self.player1.set_peer_id(client_id)
 		self.player2.set_peer_id(1)
 	if my_id == self.player2.get_peer_id():
-		pass
-		#$VBoxContainer.rotation_degrees = 180
+		_flip_gui()
 	_play()
 
+func _flip_gui():
+	$VBoxContainer/BoardWrapper.scale = Vector2(1, -1)
+	$VBoxContainer/BoardWrapper.position.y += $VBoxContainer/BoardWrapper.size.y
+	
+	self.gui.flip()
+	
+	var tmp = $VBoxContainer/BotHUD/Player1.text
+	$VBoxContainer/BotHUD/Player1.text = $VBoxContainer/TopHUD/Player2.text
+	$VBoxContainer/TopHUD/Player2.text = tmp
+	
+	var timer1 = self.player1.get_child(0)
+	self.player1.remove_child(timer1)
+	var timer2 = self.player2.get_child(0)
+	self.player2.remove_child(timer2)
+	self.player1.add_child(timer2)
+	self.player2.add_child(timer1)
 
 @rpc("authority")
 func _receive_white_assignment(is_server_white: bool):
@@ -89,7 +114,7 @@ func _receive_white_assignment(is_server_white: bool):
 
 
 func _setup_players():
-	self.player1.inizialize("Plants", 12, true, false)
+	self.player1.inizialize("Plants", 12, false, false)
 	self.player1.set_time_left(60)
 	$VBoxContainer/BotHUD/Player1.text = self.player1.get_ign()
 	$VBoxContainer/BotHUD/Player1Timer.text = self.player1.format_time()
@@ -101,17 +126,17 @@ func _setup_players():
 	
 	if my_multiplayer.multiplayer.get_unique_id() == 1:
 		self.is_server_white = randi() % 2 == 0  # true → server è bianco
-		_receive_white_assignment.rpc_id(my_multiplayer.multiplayer.get_peers()[0], self.is_server_white)  # invia al client
+		rpc_id(my_multiplayer.multiplayer.get_peers()[0], "_receive_white_assignment", self.is_server_white)  # invia al client
 		_assign_colors(self.is_server_white)
 
 func _play(restart = false):
 	self.logic.set_players(player1, player2)
-	
+
 	self.gui.set_appearence_only(false)
 
 	self._fade_out_music()
 	self._play_animation()
-	
+
 	self.logic.game_start(self.game_finished)
 	await self.game_finished
 	self.player1.stop_timer()
@@ -183,8 +208,8 @@ func _on_play_again_pressed() -> void:
 	self.quit_button.disabled = true
 	
 	if self.retry_button.text == "Play again":
-		var board_path = $VBoxContainer/Board.scene_file_path
-		$VBoxContainer/Board.queue_free()
+		var board_path = $VBoxContainer/BoardWrapper/Board.scene_file_path
+		$VBoxContainer/BoardWrapper/Board.queue_free()
 		self.gui.queue_free()
 
 		await get_tree().process_frame
@@ -229,7 +254,15 @@ func _check_all_ready() -> void:
 		_setup_players()
 
 func _on_quit_pressed() -> void:
-	get_tree().quit()
+	if self.quit_button.text == "Main menu":
+		$TransitionCircle.visible = true
+		$TransitionCircle/Transition.play("fade_out")
+		await $TransitionCircle/Transition.animation_finished
+		get_tree().reload_current_scene()
+	else:
+		$TransitionCircle/Transition.play("fade_out")
+		await $TransitionCircle/Transition.animation_finished
+		get_tree().quit()
 
 
 func _on_multiplayer_all_peers_connected() -> void:
@@ -253,3 +286,5 @@ func _on_multiplayer_peer_disconnected_signal(id: Variant) -> void:
 		else:
 			winner = 1
 	end_game(winner)
+	self.retry_button.disabled = true
+	self.quit_button.text = "Main menu"

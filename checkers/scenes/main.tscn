@@ -1,14 +1,17 @@
-[gd_scene load_steps=14 format=3 uid="uid://durfvn0w6iv78"]
+[gd_scene load_steps=18 format=3 uid="uid://durfvn0w6iv78"]
 
 [ext_resource type="Script" uid="uid://bnpr32q7ct2m1" path="res://scripts/main.gd" id="1_pptng"]
 [ext_resource type="PackedScene" uid="uid://bmwwouhjteyui" path="res://scenes/board.tscn" id="1_qq4w8"]
 [ext_resource type="FontFile" uid="uid://fmy6dk7ybvpd" path="res://art/fonts/xolonium/xolonium-fonts-4.1/ttf/Xolonium-Bold.ttf" id="2_ly7go"]
+[ext_resource type="Shader" uid="uid://coalkqasocg2e" path="res://shaders/bg.gdshader" id="2_qh4pf"]
+[ext_resource type="Texture2D" uid="uid://dx6hm3siekslg" path="res://art/bg.png" id="3_ili3w"]
 [ext_resource type="PackedScene" uid="uid://b53hwusjwh0mi" path="res://scenes/player.tscn" id="4_tsokc"]
 [ext_resource type="PackedScene" uid="uid://b0s7k1ehk1a12" path="res://scenes/winner.tscn" id="5_g783o"]
 [ext_resource type="AudioStream" uid="uid://jjuvq1l1eked" path="res://art/sounds/win.mp3" id="6_ohxhk"]
 [ext_resource type="AudioStream" uid="uid://dc3xpf4to1yem" path="res://art/sounds/draw.mp3" id="7_5r4uu"]
 [ext_resource type="AudioStream" uid="uid://xewxamx0r5uq" path="res://art/sounds/Overworld Lofi.mp3" id="8_ubc4i"]
 [ext_resource type="PackedScene" uid="uid://bpibqs8mpo7xt" path="res://scenes/multiplayer.tscn" id="9_dby6b"]
+[ext_resource type="PackedScene" path="res://scenes/transition_circle.tscn" id="13_8di78"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_hrhvo"]
 font = ExtResource("2_ly7go")
@@ -31,6 +34,9 @@ font_color = Color(1, 1, 0.129412, 1)
 font = ExtResource("2_ly7go")
 font_size = 24
 font_color = Color(1, 1, 0.129412, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_tgoh5"]
+shader = ExtResource("2_qh4pf")
 
 [node name="Main" type="Control"]
 layout_mode = 3
@@ -56,10 +62,10 @@ layout_mode = 2
 
 [node name="Player2" type="Label" parent="VBoxContainer/TopHUD"]
 layout_mode = 2
-offset_left = 9.0
-offset_top = 22.0
-offset_right = 250.0
-offset_bottom = 62.0
+offset_left = 7.0
+offset_top = 7.0
+offset_right = 248.0
+offset_bottom = 47.0
 text = "Player 2"
 label_settings = SubResource("LabelSettings_hrhvo")
 autowrap_mode = 3
@@ -67,17 +73,28 @@ clip_text = true
 
 [node name="Player2Timer" type="Label" parent="VBoxContainer/TopHUD"]
 layout_mode = 2
-offset_left = 405.0
-offset_top = 22.0
-offset_right = 538.0
-offset_bottom = 62.0
+offset_left = 407.0
+offset_top = 7.0
+offset_right = 540.0
+offset_bottom = 47.0
 text = "00:00"
 label_settings = SubResource("LabelSettings_i5vyl")
 horizontal_alignment = 2
 
-[node name="Board" parent="VBoxContainer" instance=ExtResource("1_qq4w8")]
-custom_minimum_size = Vector2(0, 30)
+[node name="BoardWrapper" type="Control" parent="VBoxContainer"]
+custom_minimum_size = Vector2(545, 510)
 layout_mode = 2
+
+[node name="Board" parent="VBoxContainer/BoardWrapper" instance=ExtResource("1_qq4w8")]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 0.0
+offset_bottom = 0.0
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="BotHUD" type="Control" parent="VBoxContainer"]
 visible = false
@@ -86,20 +103,20 @@ layout_mode = 2
 
 [node name="Player1" type="Label" parent="VBoxContainer/BotHUD"]
 layout_mode = 2
-offset_left = 9.0
-offset_top = -3.0
-offset_right = 237.0
-offset_bottom = 37.0
+offset_left = 7.0
+offset_top = 13.0
+offset_right = 235.0
+offset_bottom = 53.0
 text = "Player 1"
 label_settings = SubResource("LabelSettings_e2h5i")
 autowrap_mode = 3
 
 [node name="Player1Timer" type="Label" parent="VBoxContainer/BotHUD"]
 layout_mode = 2
-offset_left = 405.0
-offset_top = -3.0
-offset_right = 538.0
-offset_bottom = 37.0
+offset_left = 407.0
+offset_top = 13.0
+offset_right = 540.0
+offset_bottom = 53.0
 text = "00:00"
 label_settings = SubResource("LabelSettings_vfwxg")
 horizontal_alignment = 2
@@ -108,9 +125,35 @@ horizontal_alignment = 2
 
 [node name="Player2" parent="." instance=ExtResource("4_tsokc")]
 
+[node name="Scroller" type="TextureRect" parent="."]
+texture_repeat = 2
+material = SubResource("ShaderMaterial_tgoh5")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_ili3w")
+expand_mode = 3
+stretch_mode = 4
+
 [node name="Menu" parent="." instance=ExtResource("5_g783o")]
 modulate = Color(1, 1, 1, 0)
 layout_mode = 1
+
+[node name="TransitionCircle" parent="." instance=ExtResource("13_8di78")]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 0.0
+offset_bottom = 0.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
 
 [node name="Win" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("6_ohxhk")

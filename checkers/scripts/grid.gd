@@ -90,6 +90,12 @@ func setup_gui(new_board):
 	self.move_child($Promotion, children - 1)
 
 
+func flip():
+	for child in self.get_children():
+		if child is ColorRect:
+			child.flip()
+
+
 func _create_matrix(rows, cols):
 	for x in range(rows):
 		var col = []
@@ -192,7 +198,8 @@ func _on_new_king(old_cell):
 	man.queue_free()
 	man_container.add_child(king)
 	self.man_reference = king
-
+	if my_turn and not white_turn or not my_turn and white_turn:
+		tile.flip()
 
 func _player_changed(peer_id, white_turn):
 	self.my_turn = self.my_multiplayer.multiplayer.get_unique_id() == peer_id
