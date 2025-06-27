@@ -10,13 +10,13 @@ var retry_button
 var quit_button
 var tween
 var players_ready : Dictionary
-var is_ready
+var is_server_white: bool
 
 @onready var gui = $VBoxContainer/Board/Grid
 @onready var player1 = $Player1
 @onready var player2 = $Player2
 @onready var menu_scene = $Menu
-@onready var my_multiplayer = $MultiPlayer
+@onready var my_multiplayer = $Multiplayer
 
 
 func _ready():
@@ -29,26 +29,11 @@ func _ready():
 	quit_button.connect("pressed", Callable(self, "_on_quit_pressed"))
 	retry_button.connect("pressed", Callable(self, "_on_play_again_pressed"))
 	
-	
 func _multi_setup():
-	my_multiplayer.connection()
-	my_multiplayer.all_peers_connected.connect(func(): 
-		_game_setup()
-	)
-	
+	self.my_multiplayer.connection()
+	self.my_multiplayer.all_peers_connected.connect(_game_setup)
 	
 func _game_setup():
-	print("SETUPPO")
-	self.player1.inizialize("Plants", 12, true, false)
-	self.player1.set_time_left(7)
-	$VBoxContainer/BotHUD/Player1.text = self.player1.get_ign()
-	$VBoxContainer/BotHUD/Player1Timer.text = self.player1.format_time()
-
-	self.player2.inizialize("Zombies", 12, false, false)
-	self.player2.set_time_left(60)
-	$VBoxContainer/TopHUD/Player2.text = self.player2.get_ign()
-	$VBoxContainer/TopHUD/Player2Timer.text = self.player2.format_time()
-
 	self.logic = GameLogic.new()
 	self.logic.set_multiplayer(self.my_multiplayer)
 	self.logic.set_players(player1, player2)
@@ -60,12 +45,12 @@ func _game_setup():
 	self.gui.set_appearence_only(true)
 	self.gui.connect_to_target(self.logic)
 	self.gui.setup_gui(self.logic.get_board())
+	self.gui.set_multiplayer(self.my_multiplayer)
 	
 	$VBoxContainer/TopHUD.visible = true
 	$VBoxContainer/BotHUD.visible = true
 	self._fade_in_music()
 	self._menu_animation()
-
 
 func _menu_animation():
 	self.menu_scene.visible = true
@@ -83,9 +68,46 @@ func _play_animation():
 	self.tween.tween_property(self.menu_scene, "modulate", Color(1, 1, 1, 0), 0.5)
 	self.tween.connect("finished", func(): self.menu_scene.visible = false)
 
+func _assign_colors(is_server_white: bool):
+	var my_id = self.my_multiplayer.multiplayer.get_unique_id()
+	var client_id = self.my_multiplayer.multiplayer.get_peers()[0] if self.my_multiplayer.multiplayer.is_server() else my_id
+	if is_server_white:
+		self.player1.set_peer_id(1)
+		self.player2.set_peer_id(client_id)
+	else:
+		self.player1.set_peer_id(client_id)
+		self.player2.set_peer_id(1)
+	if my_id == self.player2.get_peer_id():
+		pass
+		#self.rotation_degrees = 180
+
+
+@rpc("authority")
+func _receive_white_assignment(is_server_white: bool):
+	_assign_colors(is_server_white)
+
+
+func _setup_players():
+	self.player1.inizialize("Plants", 12, true, false)
+	self.player1.set_time_left(60)
+	$VBoxContainer/BotHUD/Player1.text = self.player1.get_ign()
+	$VBoxContainer/BotHUD/Player1Timer.text = self.player1.format_time()
+	
+	self.player2.inizialize("Zombies", 12, false, false)
+	self.player2.set_time_left(60)
+	$VBoxContainer/TopHUD/Player2.text = self.player2.get_ign()
+	$VBoxContainer/TopHUD/Player2Timer.text = self.player2.format_time()
+	
+	if my_multiplayer.multiplayer.get_unique_id() == 1:
+		self.is_server_white = randi() % 2 == 0  # true → server è bianco
+		rpc_id(my_multiplayer.multiplayer.get_peers()[0], "_receive_white_assignment", self.is_server_white)  # invia al client
+		_assign_colors(self.is_server_white)
 
 func _play(restart = false):
-	print("GIOCHIAMO !")
+	_setup_players()
+	self.logic.set_players(player1, player2)
+	#print(player1.)
+	
 	self.gui.set_appearence_only(false)
 
 	self._fade_out_music()
@@ -152,8 +174,6 @@ func _on_player_2_update_label() -> void:
 	$VBoxContainer/TopHUD/Player2Timer.text = self.player2.format_time()
 
 func _on_play_again_pressed() -> void:
-	
-	
 	if self.retry_button.text == "Connect":
 		self.retry_button.text = "Connecting..."
 		self.retry_button.disabled = true
@@ -162,8 +182,6 @@ func _on_play_again_pressed() -> void:
 		
 	self.retry_button.disabled = true
 	self.quit_button.disabled = true
-	
-	#_update_button_text()
 	
 	if self.retry_button.text == "Play again":
 		var board_path = $VBoxContainer/Board.scene_file_path
@@ -215,13 +233,12 @@ func _on_quit_pressed() -> void:
 	get_tree().quit()
 
 
-func _on_multi_player_all_peers_connected() -> void:
+func _on_multiplayer_all_peers_connected() -> void:
 	self.retry_button.text = "Start game"
 	self.retry_button.disabled = false
 
 
-func _on_multi_player_peer_disconnected_signal(id: Variant) -> void:
-	
+func _on_multiplayer_peer_disconnected_signal(id: Variant) -> void:
 	var winnerid = self.my_multiplayer.multiplayer.get_unique_id()
 	var winner : int
 	if self.player1.get_peer_id() == winnerid:

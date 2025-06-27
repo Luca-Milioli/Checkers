@@ -25,15 +25,16 @@ var available_captures = {}
 var game_finished: Signal
 var past_board = []
 var move_count_rule = 0
-var multi
+var my_multiplayer
 
-func set_multiplayer(multi):
-	self.multi = multi
 
 func set_players(player1: Player, player2: Player):
 	self.player1 = player1
 	self.player2 = player2
 
+
+func set_multiplayer(my_multiplayer):
+	self.my_multiplayer = my_multiplayer
 
 func connect_to_target(receiver):
 	self.player_changed.connect(receiver._player_changed)
@@ -140,7 +141,10 @@ func _set_move():
 func _change_turn():
 	self.player1.set_playing(not self.player1.is_playing())
 	self.player2.set_playing(not self.player2.is_playing())
-	self.player_changed.emit(self.player1.is_playing())
+	if self.player1.is_playing():
+		self.player_changed.emit(self.player1.get_peer_id(), true)
+	else:
+		self.player_changed.emit(self.player2.get_peer_id(), false)
 
 
 func _make_move():
@@ -208,6 +212,7 @@ func game_start(game_finished: Signal):
 	self.game_finished = game_finished
 	self.player1.set_playing(true)
 	self.player2.set_playing(false)
+	self.player_changed.emit(self.player1.get_peer_id(), true)
 	_update_available_moves()
 	while true:
 		if await _make_move():
@@ -225,10 +230,12 @@ func get_board():
 func set_grid(grid):
 	self.grid = grid
 
+
 func _on_move_selected(old, new):
 	self.old_cell = old
 	self.new_cell = new
 	self.move_ready.emit()
+
 
 func _single_man_available_captures(x, y):
 	return self.grid.get_cell(x, y).get_child(0).get_child(0).available_captures(self.board)

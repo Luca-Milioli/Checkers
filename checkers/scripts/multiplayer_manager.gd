@@ -1,0 +1,132 @@
+extends Node
+
+signal peer_ready
+signal peer_disconnected_signal(id)
+signal all_peers_connected
+
+const ip = "127.0.0.1"
+const port = 12345
+
+var peer: ENetMultiplayerPeer
+var host : bool = false
+var connected_peers : Array = []
+var max_players : int = 2
+var connection_attempted : bool = false
+
+func _ready():
+	self.peer = ENetMultiplayerPeer.new()
+
+func is_host():
+	return self.host
+
+func connection():
+	print("Tentativo di connessione come client...")
+	connection_attempted = true
+	
+	# random timer
+	$Connecting.wait_time = randi() % 5 # random timeout
+	print($Connecting.wait_time)
+	$Connecting.start()
+	
+	# Prova a connettersi come client
+	var result = self.peer.create_client(ip, port)
+	if result != OK:
+		print("Errore nella creazione del client: ", result)
+		_fallback_to_server()
+		return
+	
+	self.multiplayer.multiplayer_peer = peer
+	
+	# Connetti tutti i segnali necessari
+	self.multiplayer.peer_connected.connect(_on_peer_connected)
+	self.multiplayer.peer_disconnected.connect(_on_peer_disconnected)
+	self.multiplayer.connected_to_server.connect(_on_connected_to_server)
+	self.multiplayer.connection_failed.connect(_on_connection_failed)  # IMPORTANTE!
+
+func _on_peer_connected(id):
+	$Connecting.stop()
+	if host:
+		print("Peer connesso con ID:", id)
+		connected_peers.append(id)
+		# Emetti il segnale quando abbiamo abbastanza giocatori
+		if connected_peers.size() >= (max_players - 1):
+			print("Tutti i peer sono connessi, emetto peer_ready")
+			emit_signal("peer_ready")
+			emit_signal("all_peers_connected")
+	else:
+		print("Client: peer connesso con ID:", id)
+		emit_signal("peer_ready")
+		emit_signal("all_peers_connected")
+
+func _on_peer_disconnected(id):
+	print("Peer disconnesso con ID:", id)
+	connected_peers.erase(id)
+	emit_signal("peer_disconnected_signal", id)
+
+func _on_connected_to_server():
+	$Connecting.stop()
+	print("Connesso al server come client")
+	emit_signal("peer_ready")
+
+func _on_connection_failed():
+	print("Connessione al server fallita")
+	$Connecting.stop()
+	_fallback_to_server()
+
+func _on_connecting_timeout() -> void:
+	print("Timeout connessione - fallback a server")
+	_fallback_to_server()
+
+func _fallback_to_server():
+	if host:  # Se già siamo server, non fare nulla
+		return
+		
+	print("Diventando server...")
+	
+	# Pulisci la connessione precedente
+	_cleanup_connection()
+	
+	# Crea un nuovo peer per il server
+	self.peer = ENetMultiplayerPeer.new()
+	var result = self.peer.create_server(port, max_players)
+	
+	if result != OK:
+		print("Errore nella creazione del server: ", result)
+		return
+	
+	print("Server avviato su porta %d" % port)
+	self.host = true
+	
+	# Configura il multiplayer per il server
+	self.multiplayer.multiplayer_peer = peer
+	
+	# Riconnetti i segnali per il server
+	if not self.multiplayer.peer_connected.is_connected(_on_peer_connected):
+		self.multiplayer.peer_connected.connect(_on_peer_connected)
+	if not self.multiplayer.peer_disconnected.is_connected(_on_peer_disconnected):
+		self.multiplayer.peer_disconnected.connect(_on_peer_disconnected)
+	
+	# Il server è pronto immediatamente
+	emit_signal("peer_ready")
+
+func _cleanup_connection():
+	# Disconnetti i segnali se connessi
+	if self.multiplayer.peer_connected.is_connected(_on_peer_connected):
+		self.multiplayer.peer_connected.disconnect(_on_peer_connected)
+	if self.multiplayer.peer_disconnected.is_connected(_on_peer_disconnected):
+		self.multiplayer.peer_disconnected.disconnect(_on_peer_disconnected)
+	if self.multiplayer.connected_to_server.is_connected(_on_connected_to_server):
+		self.multiplayer.connected_to_server.disconnect(_on_connected_to_server)
+	if self.multiplayer.connection_failed.is_connected(_on_connection_failed):
+		self.multiplayer.connection_failed.disconnect(_on_connection_failed)
+	
+	# Chiudi la connessione esistente
+	if self.multiplayer.multiplayer_peer:
+		self.multiplayer.multiplayer_peer.close()
+		self.multiplayer.multiplayer_peer = null
+
+func get_connected_peers() -> Array:
+	return connected_peers.duplicate()
+
+func get_total_players() -> int:
+	return connected_peers.size() + 1  # +1 per il giocatore locale

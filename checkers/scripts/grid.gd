@@ -13,10 +13,11 @@ const SIZE = 8
 var board = []
 var selected_piece = null
 var man_reference: Man
-var white_turn = true
+var my_turn: bool
+var white_turn: bool
 var available_moves
 var appearence_only
-
+var my_multiplayer
 
 func _ready():
 	_create_matrix(SIZE, SIZE)
@@ -32,6 +33,10 @@ func set_appearence_only(appearence: bool = false):
 
 func set_board(board):
 	self.board = board
+
+
+func set_multiplayer(my_multiplayer):
+	self.my_multiplayer = my_multiplayer
 
 
 func _create_tile(x, y):
@@ -95,7 +100,7 @@ func _create_matrix(rows, cols):
 
 func _on_piece_clicked(piece):
 	if not self.appearence_only:
-		var legal = white_turn == piece.is_white()
+		var legal = self.my_turn and self.white_turn == piece.is_white()
 		if self.man_reference:
 			self.man_reference.deselect()
 			_hide_moves_hint()
@@ -106,34 +111,21 @@ func _on_piece_clicked(piece):
 			_show_moves_hint()
 
 @rpc("any_peer")
-func _on_tile_clicked(tile, man_coords_from_remote = null):
-	
-	var tile_coord
-	var debug : String
-	
-	# remote call
-	if tile is Vector2i and man_coords_from_remote != null:
-		tile_coord = tile
-		self.man_reference = get_cell(man_coords_from_remote.x, man_coords_from_remote.y).get_child(0).get_child(0)
-		debug = "remote"
-	# local call
+func _on_tile_clicked(tile:, man_coord = null, tile_coord = null, synchronize = false):
+	if synchronize:
+		tile = get_cell(man_coord.x, man_coord.y)
+		self.man_reference = tile.get_child(0).get_child(0)
+	elif not self.man_reference:
+		return
 	else:
-		# local call but no man selected
-		if not self.man_reference:
-			return
 		tile_coord = tile.get_coordinates()
-		debug = "local"
-	
-	var man_coord = self.man_reference.get_coordinates()
-	print("Call from "+debug, " | man_coord: "+str(man_coord)+ " | tile_coord: "+str(tile))
-	
+		man_coord = self.man_reference.get_coordinates()
+
 	if tile_coord != man_coord:
 		if self.man_reference.is_selected():
 			self.move_selected.emit(man_coord, tile_coord)
-			if not man_coords_from_remote:
-				print(man_coord)
-				_on_tile_clicked.rpc(tile_coord, man_coord)
-
+			if not synchronize:
+				_on_tile_clicked.rpc(null, man_coord, tile_coord, true)
 
 func _animations(object, ending_value, param = "global_position", time = 0.2):
 	object.visible = true
@@ -146,7 +138,7 @@ func _animations(object, ending_value, param = "global_position", time = 0.2):
 	await tween.finished
 
 
-func _on_piece_moved(old_cell, new_cell, done = null):
+func _on_piece_moved(old_cell, new_cell, done):
 	var old_tile = self.get_cell(old_cell.x, old_cell.y)
 	var new_tile = self.get_cell(new_cell.x, new_cell.y)
 
@@ -172,11 +164,7 @@ func _on_piece_moved(old_cell, new_cell, done = null):
 	moved_man.deselect()
 	_hide_moves_hint()
 	
-	# done is only passed locally (not from remote)
-	# so rpc is called only if the current player made the move
-	# if piece_moved is called from remote player, rpc is not called again to avoid infinite loops
-	if done != null:
-		done.emit()
+	done.emit()
 
 
 func _on_capture(cell):
@@ -206,7 +194,8 @@ func _on_new_king(old_cell):
 	self.man_reference = king
 
 
-func _player_changed(white_turn):
+func _player_changed(peer_id, white_turn):
+	self.my_turn = self.my_multiplayer.multiplayer.get_unique_id() == peer_id
 	self.white_turn = white_turn
 
 

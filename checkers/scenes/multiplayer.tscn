@@ -1,9 +1,9 @@
-[gd_scene load_steps=2 format=3 uid="uid://4iophn1yvlj3"]
+[gd_scene load_steps=2 format=3 uid="uid://bpibqs8mpo7xt"]
 
-[ext_resource type="Script" path="res://scripts/MultiplayerManager.gd" id="1_m3yos"]
+[ext_resource type="Script" uid="uid://dxynua6y4bb0e" path="res://scripts/multiplayer_manager.gd" id="1_b0l6s"]
 
 [node name="Multiplayer" type="Node"]
-script = ExtResource("1_m3yos")
+script = ExtResource("1_b0l6s")
 
 [node name="Connecting" type="Timer" parent="."]
 wait_time = 5.0
