@@ -128,7 +128,7 @@ func _setup_players():
 	$VBoxContainer/BotHUD/Player1Timer.text = self.player1.format_time()
 	
 	self.player2.inizialize("Zombies", 12, false, false)
-	self.player2.set_time_left(6)
+	self.player2.set_time_left(60)
 	$VBoxContainer/TopHUD/Player2.text = self.player2.get_ign()
 	$VBoxContainer/TopHUD/Player2Timer.text = self.player2.format_time()
 	
