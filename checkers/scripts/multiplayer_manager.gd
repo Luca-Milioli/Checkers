@@ -23,9 +23,6 @@ func connection():
 	print("Tentativo di connessione come client...")
 	connection_attempted = true
 	
-	# random timer
-	$Connecting.wait_time = randi() % 5 # random timeout
-	print($Connecting.wait_time)
 	$Connecting.start()
 	
 	# Prova a connettersi come client

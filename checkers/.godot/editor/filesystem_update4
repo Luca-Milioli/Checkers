@@ -11,3 +11,4 @@ res://scripts/man.gd
 res://scripts/man_container.gd
 res://scripts/player_plus_timer.gd
 res://scripts/tile.gd
+res://scripts/multiplayer_manager.gd

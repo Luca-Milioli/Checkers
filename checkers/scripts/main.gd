@@ -79,7 +79,8 @@ func _assign_colors(is_server_white: bool):
 		self.player2.set_peer_id(1)
 	if my_id == self.player2.get_peer_id():
 		pass
-		#self.rotation_degrees = 180
+		#$VBoxContainer.rotation_degrees = 180
+	_play()
 
 
 @rpc("authority")
@@ -100,19 +101,17 @@ func _setup_players():
 	
 	if my_multiplayer.multiplayer.get_unique_id() == 1:
 		self.is_server_white = randi() % 2 == 0  # true → server è bianco
-		rpc_id(my_multiplayer.multiplayer.get_peers()[0], "_receive_white_assignment", self.is_server_white)  # invia al client
+		_receive_white_assignment.rpc_id(my_multiplayer.multiplayer.get_peers()[0], self.is_server_white)  # invia al client
 		_assign_colors(self.is_server_white)
 
 func _play(restart = false):
-	_setup_players()
 	self.logic.set_players(player1, player2)
-	#print(player1.)
 	
 	self.gui.set_appearence_only(false)
 
 	self._fade_out_music()
 	self._play_animation()
-
+	
 	self.logic.game_start(self.game_finished)
 	await self.game_finished
 	self.player1.stop_timer()
@@ -227,7 +226,7 @@ func _check_all_ready() -> void:
 	if players_ready.size() >= total_players:
 		self.players_ready = {} # reset for next game
 		# Tutti i giocatori sono pronti, inizia il gioco
-		self._play()
+		_setup_players()
 
 func _on_quit_pressed() -> void:
 	get_tree().quit()
@@ -241,7 +240,9 @@ func _on_multiplayer_all_peers_connected() -> void:
 func _on_multiplayer_peer_disconnected_signal(id: Variant) -> void:
 	var winnerid = self.my_multiplayer.multiplayer.get_unique_id()
 	var winner : int
-	if self.player1.get_peer_id() == winnerid:
+	if self.player1.get_peer_id() == 0:
+		winner = 0
+	elif self.player1.get_peer_id() == winnerid:
 		if self.player1.is_white():
 			winner = 1
 		else:
@@ -251,4 +252,4 @@ func _on_multiplayer_peer_disconnected_signal(id: Variant) -> void:
 			winner = 2
 		else:
 			winner = 1
-	end_game(1)
+	end_game(winner)
