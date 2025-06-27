@@ -171,12 +171,12 @@ func _make_move():
 func _check_winner():
 	if available_captures.is_empty() and available_moves.is_empty():
 		self.winner = 2 if self.player1.is_playing() else 1
-		self.game_finished.emit()
+		game_over()
 
 
 func _set_draw():
 	self.winner = 0
-	self.game_finished.emit()
+	game_over()
 
 
 func _check_repetition():
@@ -207,6 +207,10 @@ func _update_available_moves():
 		_new_available_moves()
 		self.new_moves.emit(self.available_moves)
 
+func game_over():
+	self.player1.set_playing(false)
+	self.player2.set_playing(false)
+	self.game_finished.emit()
 
 func game_start(game_finished: Signal):
 	self.game_finished = game_finished
@@ -276,7 +280,7 @@ func _new_available_moves():
 
 func _on_time_finished(white):
 	self.winner = 2 if white else 1
-	self.game_finished.emit()
+	game_over()
 
 
 func _make_key(x, y) -> String:

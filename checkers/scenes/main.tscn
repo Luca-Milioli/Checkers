@@ -1,9 +1,9 @@
 [gd_scene load_steps=18 format=3 uid="uid://durfvn0w6iv78"]
 
-[ext_resource type="Script" uid="uid://bnpr32q7ct2m1" path="res://scripts/main.gd" id="1_pptng"]
+[ext_resource type="Script" path="res://scripts/main.gd" id="1_pptng"]
 [ext_resource type="PackedScene" uid="uid://bmwwouhjteyui" path="res://scenes/board.tscn" id="1_qq4w8"]
 [ext_resource type="FontFile" uid="uid://fmy6dk7ybvpd" path="res://art/fonts/xolonium/xolonium-fonts-4.1/ttf/Xolonium-Bold.ttf" id="2_ly7go"]
-[ext_resource type="Shader" uid="uid://coalkqasocg2e" path="res://shaders/bg.gdshader" id="2_qh4pf"]
+[ext_resource type="Shader" path="res://shaders/bg.gdshader" id="2_qh4pf"]
 [ext_resource type="Texture2D" uid="uid://dx6hm3siekslg" path="res://art/bg.png" id="3_ili3w"]
 [ext_resource type="PackedScene" uid="uid://b53hwusjwh0mi" path="res://scenes/player.tscn" id="4_tsokc"]
 [ext_resource type="PackedScene" uid="uid://b0s7k1ehk1a12" path="res://scenes/winner.tscn" id="5_g783o"]
@@ -11,7 +11,7 @@
 [ext_resource type="AudioStream" uid="uid://dc3xpf4to1yem" path="res://art/sounds/draw.mp3" id="7_5r4uu"]
 [ext_resource type="AudioStream" uid="uid://xewxamx0r5uq" path="res://art/sounds/Overworld Lofi.mp3" id="8_ubc4i"]
 [ext_resource type="PackedScene" uid="uid://bpibqs8mpo7xt" path="res://scenes/multiplayer.tscn" id="9_dby6b"]
-[ext_resource type="PackedScene" path="res://scenes/transition_circle.tscn" id="13_8di78"]
+[ext_resource type="PackedScene" uid="uid://bda4oc4vppndf" path="res://scenes/transition_circle.tscn" id="13_8di78"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_hrhvo"]
 font = ExtResource("2_ly7go")

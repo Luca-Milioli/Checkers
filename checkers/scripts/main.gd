@@ -20,12 +20,12 @@ var is_server_white: bool
 
 
 func _ready():
-	$TransitionCircle/Transition.play("fade_in")
-	await $TransitionCircle/Transition.animation_finished
 	$MenuTheme.volume_db = DEFAULT_VOLUME
 	self.retry_button = $Menu/VBoxContainer/HboxContainer/PlayAgain
 	self.quit_button = $Menu/VBoxContainer/HboxContainer/Quit
 	_fade_in_music()
+	$TransitionCircle/Transition.play("fade_in")
+	await $TransitionCircle/Transition.animation_finished
 	_menu_animation()
 	self.retry_button.text = "Connect"
 	quit_button.connect("pressed", Callable(self, "_on_quit_pressed"))
@@ -146,12 +146,19 @@ func _play(restart = false):
 
 func end_game(winner):
 	var winnertext: String
+	var my_id = self.my_multiplayer.multiplayer.get_unique_id()
 	match winner:
 		1:
-			winnertext = player1.get_ign() + " won!"
+			if my_id == self.player1.get_peer_id():
+				winnertext = "you won!"
+			else:
+				winnertext = "you lost!"
 			$Win.play()
 		2:
-			winnertext = player2.get_ign() + " won!"
+			if my_id == self.player2.get_peer_id():
+				winnertext = "you won!"
+			else:
+				winnertext = "you lost!"
 			$Win.play()
 		_:
 			winnertext = "Draw"
@@ -205,7 +212,7 @@ func _on_play_again_pressed() -> void:
 		return
 		
 	self.retry_button.disabled = true
-	self.quit_button.disabled = true
+	self.quit_button.disabled = false
 	
 	if self.retry_button.text == "Play again":
 		var board_path = $VBoxContainer/BoardWrapper/Board.scene_file_path
@@ -218,7 +225,7 @@ func _on_play_again_pressed() -> void:
 
 		$VBoxContainer.add_child(new_board)
 		$VBoxContainer.move_child(new_board, 1)
-		self.gui = $VBoxContainer.get_node("Board/Grid")
+		self.gui = $VBoxContainer/BoardWrapper/Board/Grid
 		
 		self.retry_button.text = "start game"
 		#await self._multi_setup()
@@ -271,20 +278,11 @@ func _on_multiplayer_all_peers_connected() -> void:
 
 
 func _on_multiplayer_peer_disconnected_signal(id: Variant) -> void:
-	var winnerid = self.my_multiplayer.multiplayer.get_unique_id()
-	var winner : int
-	if self.player1.get_peer_id() == 0:
-		winner = 0
-	elif self.player1.get_peer_id() == winnerid:
-		if self.player1.is_white():
-			winner = 1
+	if self.player1.is_playing() or self.player2.is_playing():
+		var winnerid = self.my_multiplayer.multiplayer.get_unique_id()
+		if self.player1.get_peer_id() == winnerid:
+			end_game(1)
 		else:
-			winner = 2
-	else:
-		if self.player2.is_white():
-			winner = 2
-		else:
-			winner = 1
-	end_game(winner)
+			end_game(2)
 	self.retry_button.disabled = true
 	self.quit_button.text = "Main menu"
