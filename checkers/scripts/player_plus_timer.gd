@@ -48,6 +48,6 @@ func _on_updater_timeout(remote=false) -> void:
 	#if not remote:
 	#	_on_updater_timeout.rpc(true)
 	self.update_label.emit()
-	print("aaaaaaaaaaaaaa")
+	
 	if self._time_left <= 0:
 		self.time_finished.emit(self.is_white())

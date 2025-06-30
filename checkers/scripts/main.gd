@@ -35,16 +35,12 @@ func _multi_setup():
 	self.my_multiplayer.connection()
 	self.my_multiplayer.all_peers_connected.connect(func():
 		_main_menu_out_animation()
-		#_setup_players()
 		_game_setup()
 	)
 	
 func _game_setup():
 	self.logic = GameLogic.new()
 	self.logic.set_multiplayer(self.my_multiplayer)
-	if player1 is PlayerPlusTimer and player2 is PlayerPlusTimer:
-		self.player1.connect_to_target(self.logic)
-		self.player2.connect_to_target(self.logic)
 	self.logic.setup_matrix()
 	self.logic.connect_to_target(self.gui)
 	self.logic.set_grid(self.gui)
@@ -134,11 +130,11 @@ func _setup_players():
 		print(self.player1.is_connected("update_label", Callable(self, "_on_player_1_update_label")))
 		
 		
-		self.player1.set_time_left(60)
+		self.player1.set_time_left(20)
 		$VBoxContainer/BotHUD/Player1Timer.text = self.player1.format_time()
 		
 		
-		self.player2.set_time_left(60)
+		self.player2.set_time_left(20)
 		$VBoxContainer/TopHUD/Player2Timer.text = self.player2.format_time()
 	else:
 		var script = load("res://scripts/player.gd")
@@ -157,7 +153,10 @@ func _setup_players():
 
 func _play(restart = false):
 	self.logic.set_players(player1, player2)
-
+	if my_multiplayer.multiplayer.is_server():
+		self.player1.connect_to_target(self.logic)
+		self.player2.connect_to_target(self.logic)
+	
 	self.gui.set_appearence_only(false)
 
 	self._fade_out_music()
@@ -169,7 +168,9 @@ func _play(restart = false):
 	self.player2.stop_timer()
 	var winner = self.logic.get_winner()
 	end_game(winner)
+	end_game.rpc(winner ^ 3)  # bitwise xor
 
+@rpc("any_peer")
 func end_game(winner):
 	var winnertext: String
 	var my_id = self.my_multiplayer.multiplayer.get_unique_id()
@@ -225,18 +226,20 @@ func _fade_in_music():
 
 @rpc("authority")
 func _on_player_1_update_label(time = null) -> void:
-	print("ciao")
+	
 	if not time:
 		time = self.player1.format_time()
-		_on_player_1_update_label.rpc_id(self.my_multiplayer.multiplayer.get_peers()[0], time)
+		if self.my_multiplayer.multiplayer.get_peers().size() > 0:
+			_on_player_1_update_label.rpc_id(self.my_multiplayer.multiplayer.get_peers()[0], time)
 	$VBoxContainer/BotHUD/Player1Timer.text = time
 
 @rpc("authority")
 func _on_player_2_update_label(time = null) -> void:
-	print("CIAOO")
+	
 	if not time:
 		time = self.player2.format_time()
-		_on_player_2_update_label.rpc_id(self.my_multiplayer.multiplayer.get_peers()[0], time)
+		if self.my_multiplayer.multiplayer.get_peers().size() > 0:
+			_on_player_2_update_label.rpc_id(self.my_multiplayer.multiplayer.get_peers()[0], time)
 	$VBoxContainer/TopHUD/Player2Timer.text = time
 
 func _on_play_again_pressed() -> void:
@@ -292,6 +295,7 @@ func _check_all_ready() -> void:
 		self.players_ready = {} # reset for next game
 		# Tutti i giocatori sono pronti, inizia il gioco
 		_setup_players()
+		print(self.player1.get_signal_connection_list("time_finished"))
 		
 
 func _on_quit_pressed() -> void:
@@ -312,6 +316,7 @@ func _on_multiplayer_all_peers_connected() -> void:
 
 
 func _on_multiplayer_peer_disconnected_signal(id: Variant) -> void:
+	print("a")
 	if self.player1.is_playing() or self.player2.is_playing():
 		var winnerid = self.my_multiplayer.multiplayer.get_unique_id()
 		if self.player1.get_peer_id() == winnerid:

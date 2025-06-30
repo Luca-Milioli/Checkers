@@ -4,7 +4,7 @@
 
 [node name="Updater" type="Timer" parent="."]
 process_callback = 0
-wait_time = 0.05
+wait_time = 0.1
 ignore_time_scale = true
 
 [connection signal="timeout" from="Updater" to="." method="_on_updater_timeout"]
