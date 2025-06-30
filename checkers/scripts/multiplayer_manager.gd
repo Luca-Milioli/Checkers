@@ -33,7 +33,6 @@ func _ready():
 		return
 	self.ip = config.get_value("network", "ip", "127.0.0.1") # default is localhost
 	self.port = config.get_value("network", "port", 12345) # default is 12345
-	print(ip)
 	self.peer = ENetMultiplayerPeer.new()
 
 func is_host():

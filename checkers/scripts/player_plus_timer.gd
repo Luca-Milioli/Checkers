@@ -8,7 +8,7 @@ signal update_label
 signal time_finished
 
 var _time_left: float
-	
+
 func _ready():
 	$Updater.connect("timeout", Callable(self, "_on_updater_timeout"))
 
@@ -37,17 +37,13 @@ func set_playing(playing: bool):
 	else:
 		stop_timer()
 
-
 func stop_timer():
 	$Updater.stop()
 
-@rpc("any_peer")
-func _on_updater_timeout(remote=false) -> void:
-	
+func _on_updater_timeout() -> void:
 	self._time_left -= $Updater.wait_time
-	#if not remote:
-	#	_on_updater_timeout.rpc(true)
 	self.update_label.emit()
-	
+	print(_time_left)
+	print(is_white())
 	if self._time_left <= 0:
 		self.time_finished.emit(self.is_white())
