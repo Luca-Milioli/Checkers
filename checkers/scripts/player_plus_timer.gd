@@ -43,7 +43,5 @@ func stop_timer():
 func _on_updater_timeout() -> void:
 	self._time_left -= $Updater.wait_time
 	self.update_label.emit()
-	print(_time_left)
-	print(is_white())
 	if self._time_left <= 0:
 		self.time_finished.emit(self.is_white())

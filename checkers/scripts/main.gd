@@ -90,6 +90,14 @@ func _assign_colors(is_server_white: bool):
 		_flip_gui()
 	_play()
 
+func _swap_timer():
+	var timer1 = self.player1.get_child(0)
+	self.player1.remove_child(timer1)
+	var timer2 = self.player2.get_child(0)
+	self.player2.remove_child(timer2)
+	self.player1.add_child(timer2)
+	self.player2.add_child(timer1)
+
 func _flip_gui():
 	$VBoxContainer/BoardWrapper.scale = Vector2(1, -1)
 	$VBoxContainer/BoardWrapper.position.y += $VBoxContainer/BoardWrapper.size.y
@@ -99,16 +107,7 @@ func _flip_gui():
 	$VBoxContainer/TopHUD/Player2.text = tmp
 	
 	if self.is_server:
-		var tmp2 = self.player1.get_time_left()
-		self.player1.set_time_left(self.player2.get_time_left())
-		self.player2.set_time_left(tmp2)
-		
-		var timer1 = self.player1.get_child(0)
-		self.player1.remove_child(timer1)
-		var timer2 = self.player2.get_child(0)
-		self.player2.remove_child(timer2)
-		self.player1.add_child(timer2)
-		self.player2.add_child(timer1)
+		_swap_timer()
 		
 		self.player1.connect("update_label", Callable(self, "_on_player_2_update_label"))
 		self.player2.connect("update_label", Callable(self, "_on_player_1_update_label"))
@@ -131,10 +130,10 @@ func _setup_players():
 		self.player2.set_script(script)
 		self.player2.connect("update_label", Callable(self, "_on_player_2_update_label"))
 		
-		self.player1.set_time_left(10)
+		self.player1.set_time_left(60)
 		$VBoxContainer/BotHUD/Player1Timer.text = self.player1.format_time()
 		
-		self.player2.set_time_left(10)
+		self.player2.set_time_left(60)
 		$VBoxContainer/TopHUD/Player2Timer.text = self.player2.format_time()
 		
 		_on_player_1_update_label()
@@ -171,6 +170,8 @@ func _play(restart = false):
 		self.player1.stop_timer()
 		self.player2.stop_timer()
 		var winner = self.logic.get_winner()
+		if self.player2.get_peer_id() == 1 and self.player1.get_time_left() < 0 or self.player2.get_time_left() <= 0:
+			winner = 2 if winner == 1 else 1
 		end_game(winner)
 		end_game.rpc_id(self.my_multiplayer.multiplayer.get_peers()[0], winner)
 
@@ -272,6 +273,8 @@ func _on_play_again_pressed() -> void:
 		if $VBoxContainer/BoardWrapper.scale == Vector2(1, -1):
 			$VBoxContainer/BoardWrapper.position.y -= $VBoxContainer/BoardWrapper.size.y
 			$VBoxContainer/BoardWrapper.scale = Vector2(1, 1)
+			_swap_timer()
+		
 		self.retry_button.text = "start game"
 		self._game_setup()
 	
@@ -326,7 +329,7 @@ func _on_multiplayer_peer_disconnected_signal(id: Variant) -> void:
 				end_game(1)
 			else:
 				end_game(2)
-		elif $Menu/VBoxContainer/WinnerText.visible:
+		elif not $Menu/VBoxContainer/WinnerText.visible:
 			end_game(0)
 	self.retry_button.disabled = true
 	self.quit_button.text = "Main menu"
