@@ -36,6 +36,7 @@ func set_players(player1: Player, player2: Player):
 func set_multiplayer(my_multiplayer):
 	self.my_multiplayer = my_multiplayer
 
+
 func connect_to_target(receiver):
 	self.player_changed.connect(receiver._player_changed)
 	self.piece_moved.connect(receiver._on_piece_moved)
@@ -207,10 +208,12 @@ func _update_available_moves():
 		_new_available_moves()
 		self.new_moves.emit(self.available_moves)
 
+
 func game_over():
 	self.player1.set_playing(false)
 	self.player2.set_playing(false)
 	self.game_finished.emit()
+
 
 func game_start(game_finished: Signal):
 	self.game_finished = game_finished

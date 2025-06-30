@@ -19,6 +19,7 @@ var available_moves
 var appearence_only
 var my_multiplayer
 
+
 func _ready():
 	_create_matrix(SIZE, SIZE)
 
@@ -118,13 +119,14 @@ func _on_piece_clicked(piece):
 			self.man_reference.select()
 			_show_moves_hint()
 
+
 @rpc("any_peer")
 func _on_tile_clicked(tile, man_coord = null, tile_coord = null, synchronize = false):
 	if not my_turn and not synchronize:
 		return
 	if synchronize:
 		tile = get_cell(man_coord.x, man_coord.y)
-		self.man_reference = tile.get_child(0).get_child(0) # man 2, 4 | tile 3, 4
+		self.man_reference = tile.get_child(0).get_child(0)  # man 2, 4 | tile 3, 4
 	elif not self.man_reference:
 		return
 	else:
@@ -136,6 +138,7 @@ func _on_tile_clicked(tile, man_coord = null, tile_coord = null, synchronize = f
 			self.move_selected.emit(man_coord, tile_coord)
 			if not synchronize:
 				_on_tile_clicked.rpc(null, man_coord, tile_coord, true)
+
 
 func _animations(object, ending_value, param = "global_position", time = 0.2):
 	object.visible = true
@@ -173,7 +176,7 @@ func _on_piece_moved(old_cell, new_cell, done):
 	moved_man.set_coordinates(new_cell.x, new_cell.y)
 	moved_man.deselect()
 	_hide_moves_hint()
-	
+
 	done.emit()
 
 
@@ -204,6 +207,7 @@ func _on_new_king(old_cell):
 	self.man_reference = king
 	if my_turn and not white_turn or not my_turn and white_turn:
 		tile.flip()
+
 
 func _player_changed(peer_id, white_turn):
 	self.my_turn = self.my_multiplayer.multiplayer.get_unique_id() == peer_id

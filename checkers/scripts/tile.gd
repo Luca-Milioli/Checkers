@@ -24,7 +24,8 @@ func flip():
 	var man_container = self.get_child(0)
 	if man_container:
 		man_container.flip()
-	
+
+
 func _draw():
 	if show_circle:
 		var radius = min(size.x, size.y) * 0.2

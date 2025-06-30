@@ -9,8 +9,10 @@ signal time_finished
 
 var _time_left: float
 
+
 func _ready():
 	$Updater.connect("timeout", Callable(self, "_on_updater_timeout"))
+
 
 func connect_to_target(receiver):
 	self.time_finished.connect(receiver._on_time_finished)
@@ -37,8 +39,10 @@ func set_playing(playing: bool):
 	else:
 		stop_timer()
 
+
 func stop_timer():
 	$Updater.stop()
+
 
 func _on_updater_timeout() -> void:
 	self._time_left -= $Updater.wait_time

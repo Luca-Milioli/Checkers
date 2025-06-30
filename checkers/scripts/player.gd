@@ -15,6 +15,7 @@ func inizialize(name: String, man_number: int, white: bool, playing: bool):
 	self.set_white(white)
 	self._playing = playing  # avoid override issues
 
+
 func get_ign():
 	return self._ign
 
