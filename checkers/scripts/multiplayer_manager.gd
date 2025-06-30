@@ -24,7 +24,8 @@ func _ready():
 	var path = "user://config.cfg" 
 	if not FileAccess.file_exists(path):
 		var file = FileAccess.open(path, FileAccess.WRITE)
-		file.store_line("ip=127.0.0.1")
+		file.store_line("[network]")
+		file.store_line('ip="127.0.0.1"')
 		file.store_line("port=12345")
 		file.close()
 	if config.load(path) != OK:
@@ -32,6 +33,7 @@ func _ready():
 		return
 	self.ip = config.get_value("network", "ip", "127.0.0.1") # default is localhost
 	self.port = config.get_value("network", "port", 12345) # default is 12345
+	print(ip)
 	self.peer = ENetMultiplayerPeer.new()
 
 func is_host():

@@ -35,15 +35,16 @@ func _multi_setup():
 	self.my_multiplayer.connection()
 	self.my_multiplayer.all_peers_connected.connect(func():
 		_main_menu_out_animation()
+		#_setup_players()
 		_game_setup()
 	)
 	
 func _game_setup():
 	self.logic = GameLogic.new()
 	self.logic.set_multiplayer(self.my_multiplayer)
-	self.logic.set_players(player1, player2)
-	self.player1.connect_to_target(self.logic)
-	self.player2.connect_to_target(self.logic)
+	if player1 is PlayerPlusTimer and player2 is PlayerPlusTimer:
+		self.player1.connect_to_target(self.logic)
+		self.player2.connect_to_target(self.logic)
 	self.logic.setup_matrix()
 	self.logic.connect_to_target(self.gui)
 	self.logic.set_grid(self.gui)
@@ -87,8 +88,8 @@ func _assign_colors(is_server_white: bool):
 	else:
 		self.player1.set_peer_id(client_id)
 		self.player2.set_peer_id(1)
-	if my_id == self.player2.get_peer_id():
-		_flip_gui()
+	#if my_id == self.player2.get_peer_id():
+		#_flip_gui()
 	_play()
 
 func _flip_gui():
@@ -122,17 +123,34 @@ func _receive_white_assignment(is_server_white: bool):
 
 
 func _setup_players():
+	
+	if my_multiplayer.multiplayer.is_server():
+		var script = load("res://scripts/player_plus_timer.gd")
+		self.player1.set_script(script)
+		self.player1.connect("update_label", Callable(self, "_on_player_1_update_label"))
+		self.player2.set_script(script)
+		self.player2.connect("update_label", Callable(self, "_on_player_2_update_label"))
+		
+		print(self.player1.is_connected("update_label", Callable(self, "_on_player_1_update_label")))
+		
+		
+		self.player1.set_time_left(60)
+		$VBoxContainer/BotHUD/Player1Timer.text = self.player1.format_time()
+		
+		
+		self.player2.set_time_left(60)
+		$VBoxContainer/TopHUD/Player2Timer.text = self.player2.format_time()
+	else:
+		var script = load("res://scripts/player.gd")
+		self.player1.set_script(script)
+		self.player2.set_script(script)
+	
 	self.player1.inizialize("Plants", 12, false, false)
-	self.player1.set_time_left(60)
 	$VBoxContainer/BotHUD/Player1.text = self.player1.get_ign()
-	$VBoxContainer/BotHUD/Player1Timer.text = self.player1.format_time()
-	
 	self.player2.inizialize("Zombies", 12, false, false)
-	self.player2.set_time_left(60)
 	$VBoxContainer/TopHUD/Player2.text = self.player2.get_ign()
-	$VBoxContainer/TopHUD/Player2Timer.text = self.player2.format_time()
 	
-	if my_multiplayer.multiplayer.get_unique_id() == 1:
+	if my_multiplayer.multiplayer.is_server():
 		self.is_server_white = randi() % 2 == 0  # true → server è bianco
 		rpc_id(my_multiplayer.multiplayer.get_peers()[0], "_receive_white_assignment", self.is_server_white)  # invia al client
 		_assign_colors(self.is_server_white)
@@ -205,12 +223,21 @@ func _fade_in_music():
 		t.tween_property($MenuTheme, "volume_db", DEFAULT_VOLUME, 0.5)
 
 
-func _on_player_1_update_label() -> void:
-	$VBoxContainer/BotHUD/Player1Timer.text = self.player1.format_time()
+@rpc("authority")
+func _on_player_1_update_label(time = null) -> void:
+	print("ciao")
+	if not time:
+		time = self.player1.format_time()
+		_on_player_1_update_label.rpc_id(self.my_multiplayer.multiplayer.get_peers()[0], time)
+	$VBoxContainer/BotHUD/Player1Timer.text = time
 
-
-func _on_player_2_update_label() -> void:
-	$VBoxContainer/TopHUD/Player2Timer.text = self.player2.format_time()
+@rpc("authority")
+func _on_player_2_update_label(time = null) -> void:
+	print("CIAOO")
+	if not time:
+		time = self.player2.format_time()
+		_on_player_2_update_label.rpc_id(self.my_multiplayer.multiplayer.get_peers()[0], time)
+	$VBoxContainer/TopHUD/Player2Timer.text = time
 
 func _on_play_again_pressed() -> void:
 	if self.retry_button.text == "Connect":
@@ -265,6 +292,7 @@ func _check_all_ready() -> void:
 		self.players_ready = {} # reset for next game
 		# Tutti i giocatori sono pronti, inizia il gioco
 		_setup_players()
+		
 
 func _on_quit_pressed() -> void:
 	if self.quit_button.text == "Main menu":
@@ -290,5 +318,6 @@ func _on_multiplayer_peer_disconnected_signal(id: Variant) -> void:
 			end_game(1)
 		else:
 			end_game(2)
+	end_game(0)
 	self.retry_button.disabled = true
 	self.quit_button.text = "Main menu"

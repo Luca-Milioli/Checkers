@@ -105,6 +105,8 @@ func _create_matrix(rows, cols):
 
 
 func _on_piece_clicked(piece):
+	if not my_turn:
+		return
 	if not self.appearence_only:
 		var legal = self.my_turn and self.white_turn == piece.is_white()
 		if self.man_reference:
@@ -117,10 +119,12 @@ func _on_piece_clicked(piece):
 			_show_moves_hint()
 
 @rpc("any_peer")
-func _on_tile_clicked(tile:, man_coord = null, tile_coord = null, synchronize = false):
+func _on_tile_clicked(tile, man_coord = null, tile_coord = null, synchronize = false):
+	if not my_turn and not synchronize:
+		return
 	if synchronize:
 		tile = get_cell(man_coord.x, man_coord.y)
-		self.man_reference = tile.get_child(0).get_child(0)
+		self.man_reference = tile.get_child(0).get_child(0) # man 2, 4 | tile 3, 4
 	elif not self.man_reference:
 		return
 	else:

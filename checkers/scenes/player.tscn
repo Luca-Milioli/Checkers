@@ -1,12 +1,10 @@
-[gd_scene load_steps=2 format=3 uid="uid://b53hwusjwh0mi"]
-
-[ext_resource type="Script" uid="uid://dje5r8lj42y5i" path="res://scripts/player_plus_timer.gd" id="1_cqyol"]
+[gd_scene format=3 uid="uid://b53hwusjwh0mi"]
 
 [node name="PlayerPlusTimer" type="Node"]
-script = ExtResource("1_cqyol")
 
 [node name="Updater" type="Timer" parent="."]
-wait_time = 0.1
+process_callback = 0
+wait_time = 0.05
 ignore_time_scale = true
 
 [connection signal="timeout" from="Updater" to="." method="_on_updater_timeout"]

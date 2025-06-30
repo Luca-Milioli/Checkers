@@ -169,7 +169,5 @@ volume_db = -10.0
 
 [node name="Multiplayer" parent="." instance=ExtResource("9_dby6b")]
 
-[connection signal="update_label" from="Player1" to="." method="_on_player_1_update_label"]
-[connection signal="update_label" from="Player2" to="." method="_on_player_2_update_label"]
 [connection signal="all_peers_connected" from="Multiplayer" to="." method="_on_multiplayer_all_peers_connected"]
 [connection signal="peer_disconnected_signal" from="Multiplayer" to="." method="_on_multiplayer_peer_disconnected_signal"]
