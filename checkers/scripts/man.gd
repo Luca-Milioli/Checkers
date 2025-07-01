@@ -48,68 +48,6 @@ func is_white():
 	return self.white
 
 
-func _deep_copy_board(board):
-	var copy = []
-	for row in board:
-		copy.append(row.duplicate(true))  # deep copy
-	return copy
-
-
-func calculate_captures(board: Array) -> Array:
-	var all_sequences = []
-	var current_path = [self.coordinates]
-	_capture_recursive(self.coordinates, board, current_path, all_sequences)
-	print(all_sequences)
-	return all_sequences
-
-
-func _capture_recursive(position: Vector2i, board, path: Array, all_sequences: Array) -> void:
-	var direction = -1 if self.white else 1
-	var capture_dirs = [Vector2i(direction * 2, 2), Vector2i(direction * 2, -2)]
-
-	var has_captured = false
-	for offset in capture_dirs:
-		var target = position + offset
-		if _check_capture_from(position, target, board):
-			has_captured = true
-			var captured_x = position.x + offset.x / 2
-			var captured_y = position.y + offset.y / 2
-			var captured_piece = board[captured_x][captured_y]
-			var board_copy = _deep_copy_board(board)
-			board_copy[captured_x][captured_y] = NO_MAN
-			board_copy[target.x][target.y] = board_copy[position.x][position.y]
-			board_copy[position.x][position.y] = NO_MAN
-			var new_path = path.duplicate()
-			new_path.append(target)
-
-			_capture_recursive(target, board_copy, new_path, all_sequences)
-
-	if not has_captured and path.size() > 1:
-		var current_len = path.size()
-		if all_sequences.is_empty():
-			all_sequences.append(path)
-		else:
-			var existing_len = all_sequences[0].size()
-			if current_len > existing_len:
-				all_sequences.clear()
-				all_sequences.append(path)
-			elif current_len == existing_len:
-				all_sequences.append(path)
-
-
-func _check_capture_from(from: Vector2i, to: Vector2i, board: Array) -> bool:
-	if not _check_move(to, board):
-		return false
-	var captured_x = from.x + (to.x - from.x) / 2
-	var captured_y = from.y + (to.y - from.y) / 2
-	if captured_x < 0 or captured_x >= 8 or captured_y < 0 or captured_y >= 8:
-		return false
-	var captured = board[captured_x][captured_y]
-	if captured == BLACK_MAN and self.white or captured == WHITE_MAN and not self.white:
-		return true
-	return false
-
-
 func _check_capture(move, board) -> bool:
 	if not _check_move(move, board):
 		return false
